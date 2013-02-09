@@ -109,7 +109,7 @@ jobs never come). If you set a wait time (in seconds), it will return after the 
 SlmQueueSqs provides a command-line tool that can be used to pop and execute jobs. You can type the following
 command within the public folder of your Zend Framework 2 application:
 
-`queue sqs <queueName> [--maxJobs=] [--visibilityTimeout=] [--waitTime=] --start`
+`php index.php queue sqs <queueName> [--maxJobs=] [--visibilityTimeout=] [--waitTime=] --start`
 
 The queueName is a mandatory parameter, while the other parameters are all optional:
 
