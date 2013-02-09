@@ -17,10 +17,15 @@ class WorkerController extends AbstractActionController
     {
         /** @var $worker \SlmQueueSqs\Worker\Worker */
         $worker    = $this->serviceLocator->get('SlmQueueSqs\Worker\Worker');
-        $queueName = $this->params('queue');
+        $queueName = $this->params('queueName');
+        $options   = array(
+            'max_number_of_messages' => $this->params('maxJobs', null),
+            'visibility_timeout'     => $this->params('visibilityTimeout', null),
+            'wait_time_seconds'      => $this->params('waitTime', null)
+        );
 
         try {
-            $count = $worker->processQueue($queueName);
+            $count = $worker->processQueue($queueName, array_filter($options));
         } catch(Exception $exception) {
             return "\nAn error occurred " . $exception->getMessage() . "\n\n";
         }

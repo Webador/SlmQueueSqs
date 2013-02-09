@@ -56,8 +56,12 @@ class Module implements
     public function getConsoleUsage(AdapterInterface $console)
     {
         return array(
-            'queue sqs <queueName> --start' => 'Process the jobs',
-            array('<queueName>', 'Queue\'s name to process')
+            'queue sqs <queueName> [--maxJobs=] [--visibilityTimeout=] [--waitTime=] --start' => 'Process the jobs',
+
+            array('<queueName>', 'Queue\'s name to process'),
+            array('--maxJobs=', 'Maximum number of jobs that can be returned from a pop call'),
+            array('--visibilityTimeout=', 'Duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a pop request'),
+            array('--waitTime=', 'Wait time (in seconds) for which the call will wait for a job to arrive in the queue before returning')
         );
     }
 }

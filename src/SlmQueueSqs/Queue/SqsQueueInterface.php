@@ -23,8 +23,7 @@ interface SqsQueueInterface extends QueueInterface
      * Delete several jobs at once
      *
      * @param  JobInterface[] $jobs
-     * @param  array          $options
      * @return void
      */
-    public function batchDelete(array $jobs, array $options = array());
+    public function batchDelete(array $jobs);
 }
