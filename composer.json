@@ -22,6 +22,7 @@
             "homepage": "http://www.michaelgallego.fr"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
         "php": ">=5.3.3",
         "zendframework/zend-mvc": "2.*",

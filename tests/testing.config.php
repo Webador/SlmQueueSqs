@@ -16,4 +16,21 @@
  * and is licensed under the MIT license. For more information, see
  * <http://www.doctrine-project.org>.
  */
-return array();
+return array(
+    'slm_queue' => array(
+        'worker' => array(
+            // Limit runs to 1 in test environment
+            'max_runs' => 1
+        ),
+
+        'sqs' => array(
+            'config_file' => __DIR__ . '/SlmQueueSqsTest/Asset/aws-config.php'
+        ),
+
+        'queues' => array(
+            'factories' => array(
+                'newsletter' => 'SlmQueueSqs\Factory\SqsQueueFactory'
+            )
+        )
+    )
+);
