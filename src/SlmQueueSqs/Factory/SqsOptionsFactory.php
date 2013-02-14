@@ -16,6 +16,7 @@ class SqsOptionsFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new SqsOptions($serviceLocator->get('Config')['slm_queue']['sqs']);
+        $config = $serviceLocator->get('Config');
+        return new SqsOptions($config['slm_queue']['sqs']);
     }
 }

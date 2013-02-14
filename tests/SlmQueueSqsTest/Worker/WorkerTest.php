@@ -45,7 +45,6 @@ class WorkerTest extends TestCase
 
         $this->queueMock->expects($this->once())
             ->method('delete')
-            ->with($job)
             ->will($this->returnCallback(function() use ($job) {
                 $job->setContent('deleted');
             })
