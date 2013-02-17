@@ -1,6 +1,6 @@
 # 0.2.2
 
-- Set the minimal version of AWS SDK to 1.1.1 (which is the first version to support Amazon SQS)
+- Set the minimal version of AWS SDK to 2.1.1 (which is the first version to support Amazon SQS)
 
 # 0.2.1
 
