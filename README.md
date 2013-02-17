@@ -13,7 +13,7 @@ Requirements
 ------------
 * [Zend Framework 2](https://github.com/zendframework/zf2)
 * [SlmQueue](https://github.com/juriansluiman/SlmQueue)
-* [Amazon AWS SDK 2](https://github.com/aws/aws-sdk-php)
+* [Amazon AWS SDK > 2.1.1](https://github.com/aws/aws-sdk-php)
 
 
 Installation
