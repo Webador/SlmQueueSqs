@@ -1,6 +1,6 @@
 <?php
 
-namespace SlmQueueSqsTest\Options;
+namespace SlmQueueSqsTest\Controller;
 
 use PHPUnit_Framework_TestCase as TestCase;
 use Aws\Sqs\SqsClient;
@@ -54,13 +54,13 @@ class WorkerControllerTest extends TestCase
         $controller->getEvent()->setRouteMatch($routeMatch);
 
         $message = array(
-            'Body' => '{"class":"SlmQueueSqsTest\\\Asset\\\SimpleJob","content":"Foo"}',
+            'Body'          => '{"class":"SlmQueueSqsTest\\\Asset\\\SimpleJob","content":"Foo"}',
             'MessageId'     => 4,
             'ReceiptHandle' => 5,
             'MD5OfBody'     => md5('foo')
         );
 
-        $result['Messages']['items'] = array($message);
+        $result['Messages'] = array($message);
 
         $this->sqsClient->expects($this->once())
             ->method('receiveMessage')
