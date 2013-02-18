@@ -44,8 +44,8 @@ class SqsService
     public function getQueueUrls($queueNamePrefix = '')
     {
         $result = $this->sqsClient->listQueues(array(
-            'QueueNamePrefix' => $queueNamePrefix)
-        );
+            'QueueNamePrefix' => $queueNamePrefix
+        ));
 
         return $result['QueueUrls'];
     }

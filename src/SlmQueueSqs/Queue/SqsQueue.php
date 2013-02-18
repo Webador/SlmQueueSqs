@@ -82,7 +82,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
             'WaitTimeSeconds'     => isset($options['wait_time_seconds']) ? $options['wait_time_seconds'] : null,
         ));
 
-        $messages = $result['Messages']['items'];
+        $messages = $result['Messages'];
 
         $jobs = array();
         foreach ($messages as $message) {
@@ -138,11 +138,13 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
                 'DelaySeconds' => isset($options[$key]['delay_seconds']) ? $options[$key]['delay_seconds'] : null
             );
 
-            $parameters['Entries']['items'][] = array_filter($jobParameters);
+            $parameters['Entries'][] = array_filter($jobParameters, function($value) {
+                return $value !== null;
+            });
         }
 
-        $result   = $this->sqsClient->sendMessage($parameters);
-        $messages = $result['Successful']['items'];
+        $result   = $this->sqsClient->sendMessageBatch($parameters);
+        $messages = $result['Successful'];
 
         foreach ($messages as $message) {
             $batchId = $message['Id'];
@@ -170,7 +172,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
                 'ReceiptHandle' => $job->getMetadata('receiptHandle')
             );
 
-            $parameters['Entries']['items'][] = $jobParameters;
+            $parameters['Entries'][] = $jobParameters;
         }
 
         $this->sqsClient->deleteMessageBatch($parameters);
