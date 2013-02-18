@@ -1,3 +1,9 @@
+# 0.2.3
+
+- Fix a bug with batch push
+- Fix a bug with batch delete
+- More unit tests
+
 # 0.2.2
 
 - Set the minimal version of AWS SDK to 2.1.1 (which is the first version to support Amazon SQS)
