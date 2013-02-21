@@ -30,6 +30,9 @@
         "juriansluiman/slm-queue": ">=0.2",
         "aws/aws-sdk-php": ">=2.1.1"
     },
+    "require-dev": {
+        "zendframework/zend-config": "2.*"
+    },
     "autoload": {
         "psr-0": {
             "SlmQueue": "src/"
