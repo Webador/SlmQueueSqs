@@ -6,7 +6,7 @@ php:
 
 before_script:
   - composer self-update
-  - composer install --dev --prefer-dist
+  - composer install --dev --prefer-source
   - wget http://cs.sensiolabs.org/get/php-cs-fixer.phar
 
 script:
