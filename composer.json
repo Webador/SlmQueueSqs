@@ -32,7 +32,7 @@
     },
     "require-dev": {
         "zendframework/zend-config": "2.*"
-    }
+    },
     "autoload": {
         "psr-0": {
             "SlmQueue": "src/"
