@@ -15,6 +15,17 @@ Requirements
 * [SlmQueue](https://github.com/juriansluiman/SlmQueue)
 * [Amazon AWS SDK > 2.1.1](https://github.com/aws/aws-sdk-php)
 
+To-do
+-----
+
+Feel free to help in those areas if you like this module !
+
+* Write more tests to assert the queue work as expected
+* Better error handling (currently, errors that may be returned by SQS client are completely ignored, we'd
+ like to throw exceptions so that people can handle them in their code)
+* More support for programmatic queue handling: currently SlmQueueSqs offers very few options to create new
+ queues (we assume people to create them from the Amazon Console or directly through the SDK). It may be useful
+ to offer better integration so that SlmQueueSqs also offers a nice interface to create new queues.
 
 Installation
 ------------
