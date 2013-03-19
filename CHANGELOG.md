@@ -1,3 +1,7 @@
+# 0.2.4
+
+- Fix a bug when SQS returns no messages
+
 # 0.2.3
 
 - Fix a bug with batch push
