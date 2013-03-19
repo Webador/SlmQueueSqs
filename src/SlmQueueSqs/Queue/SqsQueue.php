@@ -86,7 +86,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
         ));
 
         $messages = $result['Messages'];
-        
+
         if (empty($messages)) {
             return array();
         }
