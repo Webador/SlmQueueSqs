@@ -45,9 +45,7 @@ class Module implements
      */
     public function getConsoleBanner(AdapterInterface $console)
     {
-        return "\n----------------------------------------------------------------------\n" .
-               "SlmQueueSqs | Amazon SQS Zend Framework 2 module\n" .
-               "----------------------------------------------------------------------\n";
+        return 'SlmQueueSqs ' . Version::VERSION;
     }
 
     /**
