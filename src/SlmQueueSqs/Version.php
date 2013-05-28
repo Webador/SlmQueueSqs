@@ -7,5 +7,5 @@ namespace SlmQueueSqs;
  */
 class Version
 {
-    const VERSION = '0.2.4';
+    const VERSION = '0.3.0-dev';
 }
