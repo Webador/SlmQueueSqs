@@ -17,10 +17,8 @@ class SqsServiceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        /** @var $sqsOptions \SlmQueueSqs\Options\SqsOptions */
-        $sqsOptions = $serviceLocator->get('SlmQueueSqs\Options\SqsOptions');
-        $sqsClient  = Aws::factory($sqsOptions->getConfigFile())->get('sqs');
-
+        /** @var \Aws\Sqs\SqsClient $sqsClient */
+        $sqsClient = $serviceLocator->get('Aws')->get('Sqs');
         return new SqsService($sqsClient);
     }
 }
