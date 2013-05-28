@@ -28,10 +28,16 @@
         "zendframework/zend-servicemanager": "2.*",
         "zendframework/zend-stdlib": "2.*",
         "juriansluiman/slm-queue": ">=0.2",
-        "aws/aws-sdk-php": ">=2.1.1"
+        "aws/aws-sdk-php": ">=2.1.1",
+        "aws/aws-sdk-php-zf2": "1.*"
     },
     "require-dev": {
-        "zendframework/zend-config": "2.*"
+        "zendframework/zendframework": "2.*"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.3.x-dev"
+        }
     },
     "autoload": {
         "psr-0": {
