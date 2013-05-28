@@ -3,7 +3,6 @@
 return array(
     'service_manager' => array(
         'factories' => array(
-            'SlmQueueSqs\Options\SqsOptions' => 'SlmQueueSqs\Factory\SqsOptionsFactory',
             'SlmQueueSqs\Service\SqsService' => 'SlmQueueSqs\Factory\SqsServiceFactory',
             'SlmQueueSqs\Worker\Worker'      => 'SlmQueueSqs\Factory\WorkerFactory'
         )
@@ -15,7 +14,7 @@ return array(
                 'slm-queue-sqs-worker' => array(
                     'type'    => 'Simple',
                     'options' => array(
-                        'route'    => 'queue sqs <queueName> [--maxJobs=] [--visibilityTimeout=] [--waitTime=] --start',
+                        'route'    => 'queue sqs <queue> [--maxJobs=] [--visibilityTimeout=] [--waitTime=]',
                         'defaults' => array(
                             'controller' => 'SlmQueueSqs\Controller\Worker',
                             'action'     => 'process'
@@ -27,8 +26,8 @@ return array(
     ),
 
     'controllers' => array(
-        'invokables' => array(
-            'SlmQueueSqs\Controller\Worker' => 'SlmQueueSqs\Controller\WorkerController'
+        'factories' => array(
+            'SlmQueueSqs\Controller\Worker' => 'SlmQueueSqs\Factory\WorkerControllerFactory'
         )
     ),
 );

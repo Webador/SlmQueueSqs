@@ -54,21 +54,21 @@ class Module implements
     public function getConsoleUsage(AdapterInterface $console)
     {
         return array(
-            'queue sqs <queueName> [--maxJobs=] [--visibilityTimeout=] [--waitTime=] --start' => 'Process the jobs',
+            'queue sqs <queue> [--maxJobs=] [--visibilityTimeout=] [--waitTime=]' => 'Process the jobs',
 
-            array('<queueName>', 'Queue\'s name to process'),
+            array('<queue>', 'Queue\'s name to process'),
             array('--maxJobs=', 'Maximum number of jobs that can be returned from a pop call'),
             array('--visibilityTimeout=', 'Duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a pop request'),
             array('--waitTime=', 'Wait time (in seconds) for which the call will wait for a job to arrive in the queue before returning')
         );
     }
-    
+
     /**
      * This ModuleManager feature was introduced in ZF 2.1 to check if all the dependencies needed by a module
      * were correctly loaded. However, as we want to keep backward-compatibility with ZF 2.0, please DO NOT
      * explicitely implement Zend\ModuleManager\Feature\DependencyIndicatorInterface. Just write this method and
      * the module manager will automatically call it
-     * 
+     *
      * @return array
      */
     public function getModuleDependencies()

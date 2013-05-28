@@ -23,11 +23,7 @@ return array(
             'max_runs' => 1
         ),
 
-        'sqs' => array(
-            'config_file' => __DIR__ . '/SlmQueueSqsTest/Asset/aws-config.php'
-        ),
-
-        'queues' => array(
+        'queue_manager' => array(
             'factories' => array(
                 'newsletter' => 'SlmQueueSqs\Factory\SqsQueueFactory'
             )
