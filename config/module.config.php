@@ -31,10 +31,4 @@ return array(
             'SlmQueueSqs\Controller\Worker' => 'SlmQueueSqs\Controller\WorkerController'
         )
     ),
-
-    'slm_queue' => array(
-        'sqs' => array(
-            'config_file' => ''
-        )
-    )
 );

@@ -14,6 +14,7 @@ Requirements
 * [Zend Framework 2](https://github.com/zendframework/zf2)
 * [SlmQueue](https://github.com/juriansluiman/SlmQueue)
 * [Amazon AWS SDK > 2.1.1](https://github.com/aws/aws-sdk-php)
+* [Amazon AWS ZF2 module](https://github.com/aws/aws-sdk-php-zf2)
 
 To-do
 -----
@@ -39,10 +40,11 @@ add the following line into your `composer.json` file:
 }
 ```
 
-Then, enable the module by adding `SlmQueueSqs` in your application.config.php file. You may also want to
-configure the module: just copy the `slm_queue_sqs.local.php.dist` (you can find this file in the config
-folder of SlmQueueSqs) into your config/autoload folder, and override what you want.
+Then, enable the module by adding `SlmQueueSqs` in your application.config.php file (you must also add the `Aws` key
+for enabling the AWS ZF2 module.
 
+> Starting from 0.3.0, SlmQueueSqs now internally uses the official AWS Zend Framework 2 module, so you can write
+your credentials only once for all AWS services.
 
 Documentation
 -------------
@@ -52,11 +54,9 @@ Before reading SlmQueueSqs documentation, please read [SlmQueue documentation](h
 Currently, SlmQueueSqs does not offer any real features to create queues. You'd better use the administrator console
 of Amazon AWS services to create queues.
 
+### Setting your AWS credentials
 
-### Setting the connection parameters
-
-Copy the `slm_queue_sqs.local.php.dist` file to your `config/autoload` folder, and follow the instructions.
-
+Please refer to [the documentation of the official AWS ZF2 module](https://github.com/aws/aws-sdk-php-zf2#configuration).
 
 ### Adding queues
 

@@ -1,3 +1,7 @@
+# 0.3.0 (dev)
+
+- Use AWS ZF 2 module
+
 # 0.2.4
 
 - Fix a bug when SQS returns no messages
