@@ -17,6 +17,12 @@
  * <http://www.doctrine-project.org>.
  */
 return array(
+    'aws' => array(
+        'region' => 'eu-west-1',
+        'key'    => 'my-key',
+        'secret' => 'my-secret'
+    ),
+
     'slm_queue' => array(
         'worker' => array(
             // Limit runs to 1 in test environment

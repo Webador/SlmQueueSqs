@@ -4,12 +4,12 @@ namespace SlmQueueSqsTest\Worker;
 
 use Exception;
 use PHPUnit_Framework_TestCase as TestCase;
-use SlmQueueSqs\Worker\Worker as SqsWorker;
+use SlmQueueSqs\Worker\SqsWorker;
 use SlmQueueSqsTest\Asset;
 use SlmQueueSqsTest\Util\ServiceManagerFactory;
 use Zend\ServiceManager\ServiceManager;
 
-class WorkerTest extends TestCase
+class SqsWorkerTest extends TestCase
 {
     /**
      * @var ServiceManager

@@ -4,14 +4,14 @@ namespace SlmQueueSqs\Worker;
 
 use Exception;
 use SlmQueue\Job\JobInterface;
-use SlmQueueSqs\Queue\SqsQueueInterface;
 use SlmQueue\Queue\QueueInterface;
 use SlmQueue\Worker\AbstractWorker;
+use SlmQueueSqs\Queue\SqsQueueInterface;
 
 /**
  * Worker for Amazon SQS
  */
-class Worker extends AbstractWorker
+class SqsWorker extends AbstractWorker
 {
     /**
      * {@inheritDoc}

@@ -9,7 +9,7 @@ use SlmQueueSqsTest\Util\ServiceManagerFactory;
 use Zend\Mvc\Router\RouteMatch;
 use Zend\ServiceManager\ServiceManager;
 
-class WorkerControllerTest extends TestCase
+class SqsWorkerControllerTest extends TestCase
 {
     /**
      * @var ServiceManager
@@ -38,7 +38,7 @@ class WorkerControllerTest extends TestCase
 
     public function testThrowExceptionIfQueueIsUnknown()
     {
-        $controller = $this->serviceManager->get('ControllerLoader')->get('SlmQueueSqs\Controller\Worker');
+        $controller = $this->serviceManager->get('ControllerLoader')->get('SlmQueueSqs\Controller\SqsWorkerController');
         $routeMatch = new RouteMatch(array('queue' => 'unknown'));
         $controller->getEvent()->setRouteMatch($routeMatch);
 
@@ -48,7 +48,7 @@ class WorkerControllerTest extends TestCase
 
     public function testCorrectlyCountJobs()
     {
-        $controller = $this->serviceManager->get('ControllerLoader')->get('SlmQueueSqs\Controller\Worker');
+        $controller = $this->serviceManager->get('ControllerLoader')->get('SlmQueueSqs\Controller\SqsWorkerController');
         $routeMatch = new RouteMatch(array('queue' => 'newsletter'));
         $controller->getEvent()->setRouteMatch($routeMatch);
 
@@ -62,8 +62,8 @@ class WorkerControllerTest extends TestCase
         $result['Messages'] = array($message);
 
         $this->sqsClient->expects($this->once())
-            ->method('receiveMessage')
-            ->will($this->returnValue($result));
+                        ->method('receiveMessage')
+                        ->will($this->returnValue($result));
 
         $result = $controller->processAction();
 

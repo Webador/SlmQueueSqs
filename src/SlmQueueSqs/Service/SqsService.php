@@ -38,8 +38,8 @@ class SqsService
     /**
      * Get the list of all the queue URLs
      *
-     * @return string $queueNamePrefix Optional queue name to filter queues by the given prefix
-     * @return array
+     * @param  string $queueNamePrefix Optional queue name to filter queues by the given prefix
+     * @return string
      */
     public function getQueueUrls($queueNamePrefix = '')
     {
