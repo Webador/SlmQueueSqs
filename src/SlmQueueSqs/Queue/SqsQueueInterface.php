@@ -11,6 +11,14 @@ use SlmQueue\Queue\QueueInterface;
 interface SqsQueueInterface extends QueueInterface
 {
     /**
+     * Pop several jobs at once
+     *
+     * @param  array $options
+     * @return JobInterface[]
+     */
+    public function batchPop(array $options = array());
+
+    /**
      * Push several jobs at once
      *
      * @param  JobInterface[] $jobs
