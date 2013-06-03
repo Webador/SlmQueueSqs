@@ -17,7 +17,8 @@ return array(
                         'route'    => 'queue sqs <queue> [--maxJobs=] [--visibilityTimeout=] [--waitTime=]',
                         'defaults' => array(
                             'controller' => 'SlmQueueSqs\Controller\SqsWorkerController',
-                            'action'     => 'process'
+                            'action'     => 'process',
+                            'maxJobs'    => 1
                         ),
                     ),
                 ),

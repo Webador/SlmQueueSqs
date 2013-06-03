@@ -104,6 +104,17 @@ $queue->push($job, array(
 
 Valid options are:
 
+* visibility_timeout: the duration (in seconds) that the received messages are hidden from subsequent
+  retrieve requests after being retrieved by a pop request
+* wait_time_seconds: by default, when we ask for a job, it will do a "short polling", it will
+  immediately return if no job was found. Amazon SQS also supports "long polling". This
+  value can be between 1 and 20 seconds. This allows to maintain the connection active
+  during this period of time, hence reducing the number of empty responses.
+
+#### batchPop
+
+Valid options are:
+
 * max_number_of_messages: maximum number of jobs to return. As of today, the max value can be 10. Please
  remember that Amazon SQS does not guarantee that you will receive exactly
  this number of messages, rather you can receive UP-TO n messages.

@@ -57,7 +57,7 @@ class Module implements
             'queue sqs <queue> [--maxJobs=] [--visibilityTimeout=] [--waitTime=]' => 'Process the jobs',
 
             array('<queue>', 'Queue\'s name to process'),
-            array('--maxJobs=', 'Maximum number of jobs that can be returned from a pop call'),
+            array('--maxJobs=', 'Maximum number of jobs that can be returned from a pop call (default to 1)'),
             array('--visibilityTimeout=', 'Duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a pop request'),
             array('--waitTime=', 'Wait time (in seconds) for which the call will wait for a job to arrive in the queue before returning')
         );
