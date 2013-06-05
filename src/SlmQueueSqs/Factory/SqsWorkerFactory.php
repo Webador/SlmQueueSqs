@@ -2,14 +2,14 @@
 
 namespace SlmQueueSqs\Factory;
 
-use SlmQueueSqs\Worker\Worker as SqsWorker;
+use SlmQueueSqs\Worker\SqsWorker;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * WorkerFactory
  */
-class WorkerFactory implements FactoryInterface
+class SqsWorkerFactory implements FactoryInterface
 {
     /**
      * {@inheritDoc}

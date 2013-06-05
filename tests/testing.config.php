@@ -17,17 +17,19 @@
  * <http://www.doctrine-project.org>.
  */
 return array(
+    'aws' => array(
+        'region' => 'eu-west-1',
+        'key'    => 'my-key',
+        'secret' => 'my-secret'
+    ),
+
     'slm_queue' => array(
         'worker' => array(
             // Limit runs to 1 in test environment
             'max_runs' => 1
         ),
 
-        'sqs' => array(
-            'config_file' => __DIR__ . '/SlmQueueSqsTest/Asset/aws-config.php'
-        ),
-
-        'queues' => array(
+        'queue_manager' => array(
             'factories' => array(
                 'newsletter' => 'SlmQueueSqs\Factory\SqsQueueFactory'
             )

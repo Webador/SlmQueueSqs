@@ -3,10 +3,7 @@ SlmQueueSqs
 
 [![Build Status](https://travis-ci.org/juriansluiman/SlmQueueSqs.png?branch=master)](https://travis-ci.org/juriansluiman/SlmQueueSqs)
 
-Version 0.2.4 Created by Jurian Sluiman and Michaël Gallego
-
-> NOTE : this is an early release of SlmQueueSqs, although it is tested, it may not work as expected. Please use
-> with caution, and don't hesitate to open issues or PRs !
+Version 0.3.0-dev Created by Jurian Sluiman and Michaël Gallego
 
 
 Requirements
@@ -36,7 +33,7 @@ add the following line into your `composer.json` file:
 
 ```json
 "require": {
-	"juriansluiman/slm-queue-sqs": ">=0.2"
+	"juriansluiman/slm-queue-sqs": "0.3.x-dev"
 }
 ```
 
@@ -68,13 +65,13 @@ you need to specify options, the index key for both jobs and options must matche
 * batchDelete(array $jobs): delete multiple jobs at once from the queue.
 
 A concrete class that implements this interface is included: `SlmQueueSqs\Queue\SqsQueue` and a factory is available to
-create Sqs queues. Therefore, if you want to have a queue called "email", just add the following line in your
+create Sqs queues. Therefore, if you want to have a queue called "newsletter", just add the following line in your
 `module.config.php` file:
 
 ```php
 return array(
     'slm_queue' => array(
-        'queues' => array(
+        'queue_manager' => array(
             'factories' => array(
                 'newsletter' => 'SlmQueueSqs\Factory\SqsQueueFactory'
             )
@@ -84,7 +81,6 @@ return array(
 ```
 
 This queue can therefore be pulled from the QueuePluginManager class.
-
 
 ### Operations on queues
 
@@ -108,6 +104,17 @@ $queue->push($job, array(
 
 Valid options are:
 
+* visibility_timeout: the duration (in seconds) that the received messages are hidden from subsequent
+  retrieve requests after being retrieved by a pop request
+* wait_time_seconds: by default, when we ask for a job, it will do a "short polling", it will
+  immediately return if no job was found. Amazon SQS also supports "long polling". This
+  value can be between 1 and 20 seconds. This allows to maintain the connection active
+  during this period of time, hence reducing the number of empty responses.
+
+#### batchPop
+
+Valid options are:
+
 * max_number_of_messages: maximum number of jobs to return. As of today, the max value can be 10. Please
  remember that Amazon SQS does not guarantee that you will receive exactly
  this number of messages, rather you can receive UP-TO n messages.
@@ -123,9 +130,9 @@ Valid options are:
 SlmQueueSqs provides a command-line tool that can be used to pop and execute jobs. You can type the following
 command within the public folder of your Zend Framework 2 application:
 
-`php index.php queue sqs <queueName> [--maxJobs=] [--visibilityTimeout=] [--waitTime=] --start`
+`php index.php queue sqs <queue> [--maxJobs=] [--visibilityTimeout=] [--waitTime=]`
 
-The queueName is a mandatory parameter, while the other parameters are all optional:
+The queue name is a mandatory parameter, while the other parameters are all optional:
 
 * maxJobs: maximum number of jobs that can be returned from a single pop call
 * visibilityTimeout: duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a pop request
