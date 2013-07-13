@@ -14,7 +14,6 @@ class SqsService
      */
     protected $sqsClient;
 
-
     /**
      * Constructor
      *
