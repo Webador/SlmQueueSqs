@@ -125,7 +125,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
         /** @var $job JobInterface */
         foreach ($jobs as $key => $job) {
             $jobParameters = array(
-                'Id'           => $key, // Identifier of the message in the batch
+                'Id'           => $job->getMetadata('id') ?: $key, // Identifier of the message in the batch
                 'MessageBody'  => $job->jsonSerialize(),
                 'DelaySeconds' => isset($options[$key]['delay_seconds']) ? $options[$key]['delay_seconds'] : null
             );
