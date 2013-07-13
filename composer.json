@@ -1,5 +1,5 @@
 {
-    "name": "juriansluiman/slm-queue-sqs",
+    "name": "slm/queue-sqs",
     "description": "Zend Framework 2 module that integrates with Amazon SQS queuing system",
     "type": "library",
     "keywords": [
@@ -27,7 +27,7 @@
         "zendframework/zend-mvc": "2.*",
         "zendframework/zend-servicemanager": "2.*",
         "zendframework/zend-stdlib": "2.*",
-        "juriansluiman/slm-queue": ">=0.2",
+        "slm/queue": ">=0.3.0-dev",
         "aws/aws-sdk-php": ">=2.1.1",
         "aws/aws-sdk-php-zf2": "1.*"
     },
