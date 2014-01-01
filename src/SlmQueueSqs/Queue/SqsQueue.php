@@ -62,6 +62,14 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     }
 
     /**
+     * {@inheritDoc}
+     */
+    public function getSqsQueueOptions()
+    {
+        return $this->queueOptions;
+    }
+
+    /**
      * Valid option is:
      *      - delay_seconds: the duration (in seconds) the message has to be delayed
      *
