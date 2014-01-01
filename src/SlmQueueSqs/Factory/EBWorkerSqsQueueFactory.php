@@ -7,19 +7,21 @@ use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
- * SqsQueueFactory
+ * Factory that create a SQS queue for an Elastic Beanstalk worker environment
  */
-class SqsQueueFactory implements FactoryInterface
+class EBWorkerSqsQueueFactory implements FactoryInterface
 {
     /**
      * {@inheritDoc}
      */
-    public function createService(ServiceLocatorInterface $serviceLocator, $name = '', $requestedName = '')
+    public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $parentLocator    = $serviceLocator->getServiceLocator();
         $sqsClient        = $parentLocator->get('Aws')->get('Sqs');
         $jobPluginManager = $parentLocator->get('SlmQueue\Job\JobPluginManager');
 
-        return new SqsQueue($sqsClient, $requestedName, $jobPluginManager);
+        $queueUrl = file('/var/app/sqs_worker');
+
+        return new SqsQueue($sqsClient, $queueUrl, $jobPluginManager);
     }
 }

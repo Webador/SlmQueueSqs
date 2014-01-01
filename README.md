@@ -49,8 +49,7 @@ Documentation
 
 Before reading SlmQueueSqs documentation, please read [SlmQueue documentation](https://github.com/juriansluiman/SlmQueue).
 
-Currently, SlmQueueSqs does not offer any real features to create queues. You'd better use the administrator console
-of Amazon AWS services to create queues.
+SlmQueueSqs does not offer any features to create queues. You should use the official SQS SDK or use the AWS console.
 
 ### Setting your AWS credentials
 
@@ -82,6 +81,47 @@ return array(
 ```
 
 This queue can therefore be pulled from the QueuePluginManager class.
+
+#### Using a queue for Elastic Beanstalk worker environment
+
+If you are using Amazon SQS, you may also use other AWS services. Among all of them, Elastic Beanstalk is a popular
+choice to deploy scalable applications in the cloud.
+
+Elastic Beanstalk offers a way to create [workers application](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features-managing-env-tiers.html)
+that uses a SQS queue. SlmQueueSqs offers a built-in factory that you can use to automatically interacts with the
+queue that Elastic Beanstalk creates for you.
+
+> When using this queue, there is great chance that you will actually NOT use the SlmQueue worker feature, because
+the polling is done automatically by Elastic Beanstalk environment.
+
+For this, insert the following config:
+
+```php
+return array(
+    'slm_queue' => array(
+        'queue_manager' => array(
+            'factories' => array(
+                'elastic-beanstalk-queue' => 'SlmQueueSqs\Factory\EBWorkerSqsQueueFactory'
+            )
+        )
+    )
+);
+```
+
+This factory expects that your EC2 instance contains a file called `sqs_worker` that contains the actual queue URL. To
+create this file, you must customize your Elastic Beanstalk environment by adding a new file into the `.ebextensions`
+folder at the root of your project. For instance, create the file `sqs.config`, and write the following lines:
+
+```yaml
+files:
+  "/var/app/sqs_worker":
+    mode: "000444"
+    content: |
+      `{"Ref" : "AWSEBWorkerQueueURL"}`
+```
+
+And voilà, you can now fetch the queue with the name `elastic-beanstalk-queue`, and add messages that will be
+automatically processed by your Elastic Beanstalk worker application!
 
 ### Operations on queues
 
@@ -138,14 +178,3 @@ The queue name is a mandatory parameter, while the other parameters are all opti
 * maxJobs: maximum number of jobs that can be returned from a single pop call
 * visibilityTimeout: duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a pop request
 * waitTime: wait time (in seconds) for which the call will wait for a job to arrive in the queue before returning
-
-
-### Getting the list of all existing queues
-
-You may want to retrieve a list of all existing Amazon SQS queues. You can do so by creating the `SqsService` object
-and calling the method `getQueueUrls`:
-
-```php
-$sqsService = $serviceLocator->get('SlmQueueSqs\Service\SqsService');
-$queues     = $sqsService->getQueueUrls();
-```

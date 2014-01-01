@@ -7,7 +7,7 @@ use SlmQueue\Job\JobInterface;
 use SlmQueue\Job\JobPluginManager;
 use SlmQueue\Queue\AbstractQueue;
 use SlmQueueSqs\Exception;
-use SlmQueueSqs\Options\SqsQueueOptions;
+use Zend\Uri\Http as HttpUri;
 
 /**
  * SqsQueue
@@ -20,11 +20,6 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     protected $sqsClient;
 
     /**
-     * @var SqsQueueOptions
-     */
-    protected $queueOptions;
-
-    /**
      * @var string
      */
     protected $queueUrl;
@@ -33,28 +28,25 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
      * Constructor
      *
      * @param SqsClient        $sqsClient
-     * @param SqsQueueOptions  $options
      * @param string           $name
      * @param JobPluginManager $jobPluginManager
      */
-    public function __construct(SqsClient $sqsClient, SqsQueueOptions $options, $name, JobPluginManager $jobPluginManager)
+    public function __construct(SqsClient $sqsClient, $name, JobPluginManager $jobPluginManager)
     {
-        $this->sqsClient    = $sqsClient;
-        $this->queueOptions = $options;
+        $this->sqsClient = $sqsClient;
 
         parent::__construct($name, $jobPluginManager);
 
-        // Because SQS queues are hosted on another server, we need to get its URL
-        $queue          = $this->sqsClient->getQueueUrl(array('QueueName' => $name));
-        $this->queueUrl = $queue['QueueUrl'];
-    }
+        // If $name is already an URI, we don't fetch it and use
+        $uri = new HttpUri($name);
 
-    /**
-     * {@inheritDoc}
-     */
-    public function getSqsQueueOptions()
-    {
-        return $this->queueOptions;
+        if ($uri->isValid()) {
+            $this->queueUrl = $name;
+        } else {
+            // Otherwise, we get it from AWS server, assuming $name is a queue name
+            $queue          = $this->sqsClient->getQueueUrl(array('QueueName' => $name));
+            $this->queueUrl = $queue['QueueUrl'];
+        }
     }
 
     /**
