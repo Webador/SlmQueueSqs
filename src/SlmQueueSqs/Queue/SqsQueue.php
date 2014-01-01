@@ -2,7 +2,6 @@
 
 namespace SlmQueueSqs\Queue;
 
-use Aws\Sqs\Enum\QueueAttribute;
 use Aws\Sqs\SqsClient;
 use SlmQueue\Job\JobInterface;
 use SlmQueue\Job\JobPluginManager;
@@ -45,13 +44,9 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
 
         parent::__construct($name, $jobPluginManager);
 
-        // If the queue URL has explicitly been given in the options, we reuse it
-        if (null !== $options->getQueueUrl()) {
-            $this->queueUrl = $options->getQueueUrl();
-        } else {
-            $queue          = $this->sqsClient->getQueueUrl(array('QueueName' => $name));
-            $this->queueUrl = $queue['QueueUrl'];
-        }
+        // Because SQS queues are hosted on another server, we need to get its URL
+        $queue          = $this->sqsClient->getQueueUrl(array('QueueName' => $name));
+        $this->queueUrl = $queue['QueueUrl'];
     }
 
     /**

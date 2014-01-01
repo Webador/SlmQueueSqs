@@ -26,11 +26,6 @@ use Zend\Stdlib\AbstractOptions;
 class SqsQueueOptions extends AbstractOptions
 {
     /**
-     * @var string|null
-     */
-    protected $queueUrl;
-
-    /**
      * @var int|null
      */
     protected $delaySeconds;
@@ -49,22 +44,6 @@ class SqsQueueOptions extends AbstractOptions
      * @var int|null
      */
     protected $visibilityTimeout;
-
-    /**
-     * @param string $queueUrl
-     */
-    public function setQueueUrl($queueUrl)
-    {
-        $this->queueUrl = (string) $queueUrl;
-    }
-
-    /**
-     * @return string
-     */
-    public function getQueueUrl()
-    {
-        return $this->queueUrl;
-    }
 
     /**
      * @param int $delaySeconds
