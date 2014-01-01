@@ -9,7 +9,7 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 /**
  * Factory that create a SQS queue for an Elastic Beanstalk worker environment
  */
-class EBWorkerSqsQueueFactory implements FactoryInterface
+class EBWorkerQueueFactory implements FactoryInterface
 {
     /**
      * {@inheritDoc}

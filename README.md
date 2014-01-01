@@ -101,7 +101,7 @@ return array(
     'slm_queue' => array(
         'queue_manager' => array(
             'factories' => array(
-                'elastic-beanstalk-queue' => 'SlmQueueSqs\Factory\EBWorkerSqsQueueFactory'
+                'elastic-beanstalk-queue' => 'SlmQueueSqs\Factory\EBWorkerQueueFactory'
             )
         )
     )
