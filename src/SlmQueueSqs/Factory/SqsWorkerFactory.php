@@ -16,7 +16,7 @@ class SqsWorkerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $workerOptions      = $serviceLocator->get('SlmQueue\Options\WorkerOptions');
+        $workerOptions      = $serviceLocator->get('SlmQueue\Options\ModuleOptions')->getWorker();
         $queuePluginManager = $serviceLocator->get('SlmQueue\Queue\QueuePluginManager');
 
         return new SqsWorker($queuePluginManager, $workerOptions);

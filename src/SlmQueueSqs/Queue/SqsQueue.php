@@ -2,11 +2,13 @@
 
 namespace SlmQueueSqs\Queue;
 
+use Aws\Sqs\Enum\QueueAttribute;
 use Aws\Sqs\SqsClient;
 use SlmQueue\Job\JobInterface;
 use SlmQueue\Job\JobPluginManager;
 use SlmQueue\Queue\AbstractQueue;
 use SlmQueueSqs\Exception;
+use SlmQueueSqs\Options\SqsQueueOptions;
 
 /**
  * SqsQueue
@@ -19,26 +21,44 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     protected $sqsClient;
 
     /**
+     * @var SqsQueueOptions
+     */
+    protected $queueOptions;
+
+    /**
      * @var string
      */
     protected $queueUrl;
-
 
     /**
      * Constructor
      *
      * @param SqsClient        $sqsClient
+     * @param SqsQueueOptions  $options
      * @param string           $name
      * @param JobPluginManager $jobPluginManager
      */
-    public function __construct(SqsClient $sqsClient, $name, JobPluginManager $jobPluginManager)
+    public function __construct(SqsClient $sqsClient, SqsQueueOptions $options, $name, JobPluginManager $jobPluginManager)
     {
-        $this->sqsClient = $sqsClient;
+        $this->sqsClient    = $sqsClient;
+        $this->queueOptions = $options;
+
         parent::__construct($name, $jobPluginManager);
 
-        // As Amazon SQS queues are stored on another server, we need to fetch the queue URL
-        $queue          = $this->sqsClient->createQueue(array('QueueName' => $name));
-        $this->queueUrl = $queue['QueueUrl'];
+        // If the queue URL has explicitly been given in the options, we need to reuse it
+        if (null !== $options->getQueueUrl()) {
+            $this->queueUrl = $options->getQueueUrl();
+        } else {
+            $attributes = array(
+                QueueAttribute::DELAY_SECONDS                     => $this->queueOptions->getDelaySeconds(),
+                QueueAttribute::MESSAGE_RETENTION_PERIOD          => $this->queueOptions->getRetentionPeriod(),
+                QueueAttribute::RECEIVE_MESSAGE_WAIT_TIME_SECONDS => $this->queueOptions->getWaitTimeSeconds(),
+                QueueAttribute::VISIBILITY_TIMEOUT                => $this->queueOptions->getVisibilityTimeout()
+            );
+
+            $queue          = $this->sqsClient->createQueue(array('QueueName' => $name, 'Attributes' => $attributes));
+            $this->queueUrl = $queue['QueueUrl'];
+        }
     }
 
     /**
@@ -52,7 +72,9 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
         $parameters = array(
             'QueueUrl'     => $this->queueUrl,
             'MessageBody'  => $job->jsonSerialize(),
-            'DelaySeconds' => isset($options['delay_seconds']) ? $options['delay_seconds'] : null
+            'DelaySeconds' => isset($options['delay_seconds'])
+                    ? $options['delay_seconds']
+                    : $this->queueOptions->getDelaySeconds()
         );
 
         $result = $this->sqsClient->sendMessage(array_filter($parameters));
@@ -127,7 +149,9 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
             $jobParameters = array(
                 'Id'           => $key, // Identifier of the message in the batch
                 'MessageBody'  => $job->jsonSerialize(),
-                'DelaySeconds' => isset($options[$key]['delay_seconds']) ? $options[$key]['delay_seconds'] : null
+                'DelaySeconds' => isset($options[$key]['delay_seconds'])
+                        ? $options[$key]['delay_seconds']
+                        : $this->queueOptions->getDelaySeconds()
             );
 
             $parameters['Entries'][] = array_filter($jobParameters, function($value) {
@@ -166,8 +190,10 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
         $result = $this->sqsClient->receiveMessage(array(
             'QueueUrl'            => $this->queueUrl,
             'MaxNumberOfMessages' => isset($options['max_number_of_messages']) ? $options['max_number_of_messages'] : null,
-            'VisibilityTimeout'   => isset($options['visibility_timeout']) ? $options['visibility_timeout'] : null,
-            'WaitTimeSeconds'     => isset($options['wait_time_seconds']) ? $options['wait_time_seconds'] : null,
+            'VisibilityTimeout'   => isset($options['visibility_timeout'])
+                    ? $options['visibility_timeout'] : $this->queueOptions->getVisibilityTimeout(),
+            'WaitTimeSeconds'     => isset($options['wait_time_seconds'])
+                    ? $options['wait_time_seconds'] : $this->queueOptions->getWaitTimeSeconds(),
         ));
 
         $messages = $result['Messages'];
