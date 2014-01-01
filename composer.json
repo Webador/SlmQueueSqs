@@ -24,15 +24,16 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "zendframework/zend-mvc": "2.*",
-        "zendframework/zend-servicemanager": "2.*",
-        "zendframework/zend-stdlib": "2.*",
-        "slm/queue": ">=0.3.0-dev",
+        "zendframework/zend-mvc": "~2.2",
+        "zendframework/zend-servicemanager": "~2.2",
+        "zendframework/zend-stdlib": "~2.2",
+        "slm/queue": "0.3.x-dev",
         "aws/aws-sdk-php": ">=2.1.1",
         "aws/aws-sdk-php-zf2": "1.*"
     },
     "require-dev": {
-        "zendframework/zendframework": "2.*"
+        "zendframework/zendframework": "~2.2",
+        "phpunit/phpunit": "~3.7"
     },
     "extra": {
         "branch-alias": {
@@ -41,7 +42,7 @@
     },
     "autoload": {
         "psr-0": {
-            "SlmQueue": "src/"
+            "SlmQueueSqs": "src/"
         },
         "classmap": [
             "./Module.php"

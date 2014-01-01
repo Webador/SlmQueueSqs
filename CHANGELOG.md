@@ -1,6 +1,7 @@
 # 0.3.0 (dev)
 
 - Use AWS ZF 2 module
+- pop method now only returns 1 job. You must use batchPop to return more than one job.
 
 # 0.2.4
 
