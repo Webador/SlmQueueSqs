@@ -26,29 +26,29 @@ use Zend\Stdlib\AbstractOptions;
 class SqsQueueOptions extends AbstractOptions
 {
     /**
-     * @var string
+     * @var string|null
      */
     protected $queueUrl;
 
     /**
-     * @var int
+     * @var int|null
      */
-    protected $delaySeconds = 0;
+    protected $delaySeconds;
 
     /**
-     * @var int
+     * @var int|null
      */
-    protected $retentionPeriod = 345600;
+    protected $retentionPeriod;
 
     /**
-     * @var int
+     * @var int|null
      */
-    protected $waitTimeSeconds = 0;
+    protected $waitTimeSeconds;
 
     /**
-     * @var int
+     * @var int|null
      */
-    protected $visibilityTimeout = 30;
+    protected $visibilityTimeout;
 
     /**
      * @param string $queueUrl

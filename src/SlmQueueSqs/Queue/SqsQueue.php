@@ -45,18 +45,11 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
 
         parent::__construct($name, $jobPluginManager);
 
-        // If the queue URL has explicitly been given in the options, we need to reuse it
+        // If the queue URL has explicitly been given in the options, we reuse it
         if (null !== $options->getQueueUrl()) {
             $this->queueUrl = $options->getQueueUrl();
         } else {
-            $attributes = array(
-                QueueAttribute::DELAY_SECONDS                     => $this->queueOptions->getDelaySeconds(),
-                QueueAttribute::MESSAGE_RETENTION_PERIOD          => $this->queueOptions->getRetentionPeriod(),
-                QueueAttribute::RECEIVE_MESSAGE_WAIT_TIME_SECONDS => $this->queueOptions->getWaitTimeSeconds(),
-                QueueAttribute::VISIBILITY_TIMEOUT                => $this->queueOptions->getVisibilityTimeout()
-            );
-
-            $queue          = $this->sqsClient->createQueue(array('QueueName' => $name, 'Attributes' => $attributes));
+            $queue          = $this->sqsClient->getQueueUrl(array('QueueName' => $name));
             $this->queueUrl = $queue['QueueUrl'];
         }
     }
