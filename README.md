@@ -172,10 +172,9 @@ Valid options are:
 SlmQueueSqs provides a command-line tool that can be used to pop and execute jobs. You can type the following
 command within the public folder of your Zend Framework 2 application:
 
-`php index.php queue sqs <queue> [--maxJobs=] [--visibilityTimeout=] [--waitTime=]`
+`php index.php queue sqs <queue> [--visibilityTimeout=] [--waitTime=]`
 
 The queue name is a mandatory parameter, while the other parameters are all optional:
 
-* maxJobs: maximum number of jobs that can be returned from a single pop call
 * visibilityTimeout: duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a pop request
 * waitTime: wait time (in seconds) for which the call will wait for a job to arrive in the queue before returning
