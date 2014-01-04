@@ -25,13 +25,11 @@ class SqsQueueTest extends TestCase
      */
     protected $sqsQueue;
 
-
     public function setUp()
     {
-        parent::setUp();
         $this->sqsClient = $this->getMock(
             'Aws\Sqs\SqsClient',
-            array('createQueue', 'sendMessage', 'sendMessageBatch'),
+            array('getQueueUrl', 'sendMessage', 'sendMessageBatch'),
             array(),
             '',
             false
@@ -40,11 +38,21 @@ class SqsQueueTest extends TestCase
         $this->jobPluginManager = $this->getMock('SlmQueue\Job\JobPluginManager');
 
         $this->sqsClient->expects($this->once())
-            ->method('createQueue')
-            ->with(array('QueueName' => 'newsletter'))
-            ->will($this->returnValue(array('QueueUrl' => 'http://www.endpoint.com')));
+                        ->method('getQueueUrl')
+                        ->with(array('QueueName' => 'newsletter'))
+                        ->will($this->returnValue(array('QueueUrl' => 'https://sqs.endpoint.com')));
 
-        $this->sqsQueue  = new SqsQueue($this->sqsClient, 'newsletter', $this->jobPluginManager);
+        $this->sqsQueue = new SqsQueue($this->sqsClient, 'newsletter', $this->jobPluginManager);
+    }
+
+    public function testReuseSqsUrl()
+    {
+        $sqsClient        = $this->getMock('Aws\Sqs\SqsClient', array('getQueueUrl'), array(), '', false);
+        $jobPluginManager = $this->getMock('SlmQueue\Job\JobPluginManager');
+
+        $this->sqsClient->expects($this->never())->method('getQueueUrl');
+
+        $sqsQueue = new SqsQueue($sqsClient, 'https://sqs.foo.com', $jobPluginManager);
     }
 
     public function testAssertNullParametersGetStripped()
@@ -57,11 +65,11 @@ class SqsQueueTest extends TestCase
             ->will($this->returnValue($messageBody));
 
         $this->sqsClient->expects($this->once())
-            ->method('sendMessage')
-            ->with(array(
-            'QueueUrl' => 'http://www.endpoint.com',
-            'MessageBody' => $messageBody
-        ));
+                        ->method('sendMessage')
+                        ->with(array(
+                            'QueueUrl'    => 'https://sqs.endpoint.com',
+                            'MessageBody' => $messageBody
+                        ));
 
         $this->sqsQueue->push($job, array(
             'delay_seconds' => null
@@ -78,12 +86,12 @@ class SqsQueueTest extends TestCase
         ));
 
         $this->sqsClient->expects($this->once())
-            ->method('sendMessage')
-            ->with(array(
-            'QueueUrl' => 'http://www.endpoint.com',
-            'MessageBody' => $job->jsonSerialize()
-        ))
-            ->will($this->returnValue($result));
+                        ->method('sendMessage')
+                        ->with(array(
+                            'QueueUrl' => 'https://sqs.endpoint.com',
+                            'MessageBody' => $job->jsonSerialize()
+                        ))
+                        ->will($this->returnValue($result));
 
         $this->sqsQueue->push($job);
 
@@ -118,7 +126,7 @@ class SqsQueueTest extends TestCase
         $this->sqsClient->expects($this->once())
             ->method('sendMessageBatch')
             ->with(array(
-            'QueueUrl' => 'http://www.endpoint.com',
+            'QueueUrl' => 'https://sqs.endpoint.com',
             'Entries'  => array(
                 array(
                     'Id'          => 0,

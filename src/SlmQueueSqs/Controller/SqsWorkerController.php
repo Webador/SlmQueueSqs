@@ -22,20 +22,15 @@ class SqsWorkerController extends AbstractWorkerController
         $params = $this->params()->fromRoute();
 
         $options = array(
-            'queue'                  => $params['queue'],
-            'max_number_of_messages' => $params['maxJobs'],
-            'visibility_timeout'     => isset($params['visibilityTimeout']) ? $params['visibilityTimeout'] : null,
-            'wait_time_seconds'      => isset($params['waitTime']) ? $params['waitTime'] : null
+            'queue'              => $params['queue'],
+            'visibility_timeout' => isset($params['visibilityTimeout']) ? $params['visibilityTimeout'] : null,
+            'wait_time_seconds'  => isset($params['waitTime']) ? $params['waitTime'] : null
         );
 
         $queue = $options['queue'];
 
         try {
-            if ($options['max_number_of_messages'] > 1) {
-                $result = $this->worker->processBatchableQueue($queue, array_filter($options));
-            } else {
-                $result = $this->worker->processQueue($queue, array_filter($options));
-            }
+            $result = $this->worker->processQueue($queue, array_filter($options));
         } catch (ExceptionInterface $e) {
             throw new WorkerProcessException(
                 'Caught exception while processing queue',

@@ -13,7 +13,7 @@ return array(
                 'slm-queue-sqs-worker' => array(
                     'type'    => 'Simple',
                     'options' => array(
-                        'route'    => 'queue sqs <queue> [--maxJobs=] [--visibilityTimeout=] [--waitTime=]',
+                        'route'    => 'queue sqs <queue> [--visibilityTimeout=] [--waitTime=]',
                         'defaults' => array(
                             'controller' => 'SlmQueueSqs\Controller\SqsWorkerController',
                             'action'     => 'process',

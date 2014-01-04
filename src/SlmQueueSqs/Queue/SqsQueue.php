@@ -8,6 +8,7 @@ use SlmQueue\Job\JobPluginManager;
 use SlmQueue\Queue\AbstractQueue;
 use SlmQueueSqs\Exception;
 use Zend\Uri\Http as HttpUri;
+use Zend\Uri\UriFactory;
 
 /**
  * SqsQueue
@@ -37,10 +38,8 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
 
         parent::__construct($name, $jobPluginManager);
 
-        // If $name is already an URI, we don't fetch it and use
-        $uri = new HttpUri($name);
-
-        if ($uri->isValid()) {
+        // If this is already a SQS URI, reuse it
+        if (preg_match('@^http(s)?://sqs\.@', $name)) {
             $this->queueUrl = $name;
         } else {
             // Otherwise, we get it from AWS server, assuming $name is a queue name
