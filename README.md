@@ -2,8 +2,9 @@ SlmQueueSqs
 ===========
 
 [![Build Status](https://travis-ci.org/juriansluiman/SlmQueueSqs.png?branch=master)](https://travis-ci.org/juriansluiman/SlmQueueSqs)
-[![Latest Stable Version](https://poser.pugx.org/juriansluiman/slm-queue-sqs/v/stable.png)](https://packagist.org/packages/juriansluiman/slm-queue-sqs)
-[![Latest Unstable Version](https://poser.pugx.org/juriansluiman/slm-queue-sqs/v/unstable.png)](https://packagist.org/packages/juriansluiman/slm-queue-sqs)
+[![Latest Stable Version](https://poser.pugx.org/slm/queue-sqs/v/stable.png)](https://packagist.org/packages/slm/queue-sqs)
+[![Latest Unstable Version](https://poser.pugx.org/slm/queue-sqs/v/unstable.png)](https://packagist.org/packages/slm/queue-sqs)
+[![Total Downloads](https://poser.pugx.org/slm/queue-sqs/downloads.png)](https://packagist.org/packages/slm/queue-sqs)
 
 Version 0.3.0-dev Created by Jurian Sluiman and Michaël Gallego
 
