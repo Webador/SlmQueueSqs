@@ -118,7 +118,7 @@ files:
   "/var/app/sqs_worker":
     mode: "000444"
     content: |
-      `{"Ref" : "AWSEBWorkerQueueURL"}`
+      `{"Ref" : "AWSEBWorkerQueue"}`
 ```
 
 And voilà, you can now fetch the queue with the name `elastic-beanstalk-queue`, and add messages that will be
