@@ -32,10 +32,7 @@ class SqsWorkerController extends AbstractWorkerController
         try {
             $result = $this->worker->processQueue($queue, array_filter($options));
         } catch (ExceptionInterface $e) {
-            throw new WorkerProcessException(
-                'Caught exception while processing queue',
-                $e->getCode(), $e
-            );
+            throw new WorkerProcessException('Caught exception while processing queue', $e->getCode(), $e);
         }
 
         return sprintf(

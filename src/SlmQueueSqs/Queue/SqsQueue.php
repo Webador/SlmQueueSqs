@@ -135,7 +135,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
                 'DelaySeconds' => isset($options[$key]['delay_seconds']) ? $options[$key]['delay_seconds'] : null
             );
 
-            $parameters['Entries'][] = array_filter($jobParameters, function($value) {
+            $parameters['Entries'][] = array_filter($jobParameters, function ($value) {
                 return $value !== null;
             });
         }
@@ -170,7 +170,8 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     {
         $result = $this->sqsClient->receiveMessage(array(
             'QueueUrl'            => $this->queueUrl,
-            'MaxNumberOfMessages' => isset($options['max_number_of_messages']) ? $options['max_number_of_messages'] : null,
+            'MaxNumberOfMessages' => isset($options['max_number_of_messages'])
+                    ? $options['max_number_of_messages'] : null,
             'VisibilityTimeout'   => isset($options['visibility_timeout']) ? $options['visibility_timeout'] : null,
             'WaitTimeSeconds'     => isset($options['wait_time_seconds']) ? $options['wait_time_seconds'] : null
         ));
