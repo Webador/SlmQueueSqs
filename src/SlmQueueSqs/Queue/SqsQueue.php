@@ -7,8 +7,6 @@ use SlmQueue\Job\JobInterface;
 use SlmQueue\Job\JobPluginManager;
 use SlmQueue\Queue\AbstractQueue;
 use SlmQueueSqs\Exception;
-use Zend\Uri\Http as HttpUri;
-use Zend\Uri\UriFactory;
 
 /**
  * SqsQueue
