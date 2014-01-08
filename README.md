@@ -83,47 +83,6 @@ return array(
 
 This queue can therefore be pulled from the QueuePluginManager class.
 
-#### Using a queue for Elastic Beanstalk worker environment
-
-If you are using Amazon SQS, you may also use other AWS services. Among all of them, Elastic Beanstalk is a popular
-choice to deploy scalable applications in the cloud.
-
-Elastic Beanstalk offers a way to create [workers application](http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/using-features-managing-env-tiers.html)
-that uses a SQS queue. SlmQueueSqs offers a built-in factory that you can use to automatically interacts with the
-queue that Elastic Beanstalk creates for you.
-
-> When using this queue, there is great chance that you will actually NOT use the SlmQueue worker feature, because
-the polling is done automatically by Elastic Beanstalk environment.
-
-For this, insert the following config:
-
-```php
-return array(
-    'slm_queue' => array(
-        'queue_manager' => array(
-            'factories' => array(
-                'elastic-beanstalk-queue' => 'SlmQueueSqs\Factory\EBWorkerQueueFactory'
-            )
-        )
-    )
-);
-```
-
-This factory expects that your EC2 instance contains a file called `sqs_worker` that contains the actual queue URL. To
-create this file, you must customize your Elastic Beanstalk environment by adding a new file into the `.ebextensions`
-folder at the root of your project. For instance, create the file `sqs.config`, and write the following lines:
-
-```yaml
-files:
-  "/var/app/sqs_worker":
-    mode: "000444"
-    content: |
-      `{"Ref" : "AWSEBWorkerQueue"}`
-```
-
-And voilà, you can now fetch the queue with the name `elastic-beanstalk-queue`, and add messages that will be
-automatically processed by your Elastic Beanstalk worker application!
-
 ### Operations on queues
 
 > The name of the options match the names of the Amazon AWS SDK.
