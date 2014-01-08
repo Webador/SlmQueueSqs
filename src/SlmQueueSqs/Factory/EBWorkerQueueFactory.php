@@ -20,7 +20,7 @@ class EBWorkerQueueFactory implements FactoryInterface
         $sqsClient        = $parentLocator->get('Aws')->get('Sqs');
         $jobPluginManager = $parentLocator->get('SlmQueue\Job\JobPluginManager');
 
-        $queueUrl = trim(file_get_contents('/var/app/sqs_worker'))
+        $queueUrl = trim(file_get_contents('/var/app/sqs_worker'));
 
         return new SqsQueue($sqsClient, $queueUrl, $jobPluginManager);
     }
