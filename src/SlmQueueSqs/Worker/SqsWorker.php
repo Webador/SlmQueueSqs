@@ -24,8 +24,9 @@ class SqsWorker extends AbstractWorker
             return;
         }
 
-        // Contrary to Beanstalkd, Amazon SQS does not have any mechanism to reinsert a job when it
-        // has a problem (bury in Beanstalkd). Currently, we just execute and delete if no error occurred
+        // In SQS, if an error occurs (exception for instance), the job is automatically reinserted
+        // into the queue after a configured delay (the "visibility_timeout" option). If the job executed
+        // correctly, it must explicitely be removed
         $job->execute();
         $queue->delete($job);
     }
