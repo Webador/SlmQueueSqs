@@ -4,6 +4,7 @@ namespace SlmQueueSqsTest\Queue;
 
 use PHPUnit_Framework_TestCase as TestCase;
 use Guzzle\Service\Resource\Model as ResourceModel;
+use SlmQueueSqs\Options\SqsQueueOptions;
 use SlmQueueSqs\Queue\SqsQueue;
 use SlmQueueSqsTest\Asset;
 use Zend\ServiceManager\ServiceManager;
@@ -42,17 +43,21 @@ class SqsQueueTest extends TestCase
                         ->with(array('QueueName' => 'newsletter'))
                         ->will($this->returnValue(array('QueueUrl' => 'https://sqs.endpoint.com')));
 
-        $this->sqsQueue = new SqsQueue($this->sqsClient, 'newsletter', $this->jobPluginManager);
+        $options = new SqsQueueOptions();
+
+        $this->sqsQueue = new SqsQueue($this->sqsClient, $options, 'newsletter', $this->jobPluginManager);
     }
 
-    public function testReuseSqsUrl()
+    public function testReuseSqsUrlFromOptions()
     {
         $sqsClient        = $this->getMock('Aws\Sqs\SqsClient', array('getQueueUrl'), array(), '', false);
         $jobPluginManager = $this->getMock('SlmQueue\Job\JobPluginManager');
 
         $this->sqsClient->expects($this->never())->method('getQueueUrl');
 
-        $sqsQueue = new SqsQueue($sqsClient, 'https://sqs.foo.com', $jobPluginManager);
+        $options = new SqsQueueOptions(array('queue_url' => 'https://sqs.endpoint.com'));
+
+        $sqsQueue = new SqsQueue($sqsClient, $options, 'newsletter', $jobPluginManager);
     }
 
     public function testAssertNullParametersGetStripped()

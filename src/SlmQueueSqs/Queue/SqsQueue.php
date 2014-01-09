@@ -7,6 +7,7 @@ use SlmQueue\Job\JobInterface;
 use SlmQueue\Job\JobPluginManager;
 use SlmQueue\Queue\AbstractQueue;
 use SlmQueueSqs\Exception;
+use SlmQueueSqs\Options\SqsQueueOptions;
 
 /**
  * SqsQueue
@@ -19,30 +20,33 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     protected $sqsClient;
 
     /**
-     * @var string
+     * @var SqsQueueOptions
      */
-    protected $queueUrl;
+    protected $queueOptions;
 
     /**
      * Constructor
      *
      * @param SqsClient        $sqsClient
+     * @param SqsQueueOptions  $options
      * @param string           $name
      * @param JobPluginManager $jobPluginManager
      */
-    public function __construct(SqsClient $sqsClient, $name, JobPluginManager $jobPluginManager)
-    {
-        $this->sqsClient = $sqsClient;
+    public function __construct(
+        SqsClient $sqsClient,
+        SqsQueueOptions $options,
+        $name,
+        JobPluginManager $jobPluginManager
+    ) {
+        $this->sqsClient    = $sqsClient;
+        $this->queueOptions = $options;
 
         parent::__construct($name, $jobPluginManager);
 
-        // If this is already a SQS URI, reuse it
-        if (preg_match('@^http(s)?://sqs\.@', $name)) {
-            $this->queueUrl = $name;
-        } else {
-            // Otherwise, we get it from AWS server, assuming $name is a queue name
-            $queue          = $this->sqsClient->getQueueUrl(array('QueueName' => $name));
-            $this->queueUrl = $queue['QueueUrl'];
+        // If an URL has explicitly been given in the options, let's use it, otherwise we dynamically fetch it
+        if (!$this->queueOptions->getQueueUrl()) {
+            $queue = $this->sqsClient->getQueueUrl(array('QueueName' => $name));
+            $this->queueOptions->setQueueUrl($queue['QueueUrl']);
         }
     }
 
@@ -55,7 +59,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     public function push(JobInterface $job, array $options = array())
     {
         $parameters = array(
-            'QueueUrl'     => $this->queueUrl,
+            'QueueUrl'     => $this->queueOptions->getQueueUrl(),
             'MessageBody'  => $job->jsonSerialize(),
             'DelaySeconds' => isset($options['delay_seconds']) ? $options['delay_seconds'] : null
         );
@@ -105,7 +109,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     public function delete(JobInterface $job)
     {
         $parameters = array(
-            'QueueUrl'      => $this->queueUrl,
+            'QueueUrl'      => $this->queueOptions->getQueueUrl(),
             'ReceiptHandle' => $job->getMetadata('receiptHandle')
         );
 
@@ -123,7 +127,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     public function batchPush(array $jobs, array $options = array())
     {
         $parameters = array(
-            'QueueUrl' => $this->queueUrl,
+            'QueueUrl' => $this->queueOptions->getQueueUrl(),
             'Entries'  => array()
         );
 
@@ -169,7 +173,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     public function batchPop(array $options = array())
     {
         $result = $this->sqsClient->receiveMessage(array(
-            'QueueUrl'            => $this->queueUrl,
+            'QueueUrl'            => $this->queueOptions->getQueueUrl(),
             'MaxNumberOfMessages' => isset($options['max_number_of_messages'])
                     ? $options['max_number_of_messages'] : null,
             'VisibilityTimeout'   => isset($options['visibility_timeout']) ? $options['visibility_timeout'] : null,
@@ -206,7 +210,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     public function batchDelete(array $jobs)
     {
         $parameters = array(
-            'QueueUrl' => $this->queueUrl,
+            'QueueUrl' => $this->queueOptions->getQueueUrl(),
             'Entries'  => array()
         );
 
