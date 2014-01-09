@@ -22,12 +22,13 @@
             "homepage": "http://www.michaelgallego.fr"
         }
     ],
+    "minimum-stability": "beta",
     "require": {
         "php": ">=5.3.3",
         "zendframework/zend-mvc": "~2.2",
         "zendframework/zend-servicemanager": "~2.2",
         "zendframework/zend-stdlib": "~2.2",
-        "slm/queue": "0.3.x-dev",
+        "slm/queue": "0.3.0-beta1",
         "aws/aws-sdk-php": ">=2.1.1",
         "aws/aws-sdk-php-zf2": "1.*"
     },
