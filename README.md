@@ -126,6 +126,26 @@ Valid options are:
   value can be between 1 and 20 seconds. This allows to maintain the connection active
   during this period of time, hence reducing the number of empty responses.
 
+### Configuring queues
+
+You may want to explicitly set queue URL instead of having it automatically fetched by its name (this can be useful
+if you want to use different queues in prod and test environments, while still referencing it using the same
+queue name in your code). To do so, add the following config:
+
+```php
+return array(
+    'slm_queue' => array(
+        'queues' => array(
+            'worker-queue' => array(
+                'queue_url' => 'http://sqs.amazonaws.com/my-queue'
+            )
+        )
+    )
+);
+```
+
+Now, this URL will be reused instead of fetching it to AWS servers.
+
 ### Executing jobs
 
 SlmQueueSqs provides a command-line tool that can be used to pop and execute jobs. You can type the following
