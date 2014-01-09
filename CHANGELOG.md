@@ -2,8 +2,7 @@
 
 - Use AWS ZF 2 module
 - pop method now only returns 1 job. You must use batchPop to return more than one job.
-- SqsQueue now accepts `name` parameter to be a URL. If it is a URL, it will not fetch the URL (which needs one
-HTTP calls to SQS API), and instead directly uses it.
+- You can now directly specify a queue URL for a given queue name (hence avoiding one HTTP request)
 - [BC] SQS service has been removed, please now use the official AWS SDK to list or create queues
 - [BC] SqsQueue now uses `getQueueUrl` instead of `createQueue`. This means that you must first create
 queues using the official SQS client or the AWS console. This change has been made to offer a more predictable
