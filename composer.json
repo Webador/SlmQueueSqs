@@ -1,6 +1,7 @@
 {
     "name": "slm/queue-sqs",
     "description": "Zend Framework 2 module that integrates with Amazon SQS queuing system",
+    "license": "BSD-3-Clause",
     "type": "library",
     "keywords": [
         "zf2",
