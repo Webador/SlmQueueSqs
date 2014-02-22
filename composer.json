@@ -29,7 +29,7 @@
         "zendframework/zend-mvc": "~2.2",
         "zendframework/zend-servicemanager": "~2.2",
         "zendframework/zend-stdlib": "~2.2",
-        "slm/queue": "0.3.0-beta1",
+        "slm/queue": "0.3.0-beta2",
         "aws/aws-sdk-php": ">=2.1.1",
         "aws/aws-sdk-php-zf2": "1.*"
     },
