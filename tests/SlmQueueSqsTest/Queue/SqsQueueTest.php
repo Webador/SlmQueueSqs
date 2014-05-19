@@ -30,7 +30,7 @@ class SqsQueueTest extends TestCase
     {
         $this->sqsClient = $this->getMock(
             'Aws\Sqs\SqsClient',
-            array('getQueueUrl', 'sendMessage', 'sendMessageBatch'),
+            array('getQueueUrl', 'sendMessage', 'sendMessageBatch', 'receiveMessage'),
             array(),
             '',
             false
@@ -156,5 +156,41 @@ class SqsQueueTest extends TestCase
         $this->assertEquals(2, $jobs[1]->getId());
         $this->assertEquals(2, $jobs[1]->getMetadata('id'));
         $this->assertEquals(md5('baz'), $jobs[1]->getMetadata('md5'));
+    }
+
+    public function testMetadataIsPopped()
+    {
+        $this->sqsClient->expects($this->once())
+            ->method('receiveMessage')
+            ->will($this->returnValue(array(
+                'Messages' => array(
+                    array(
+                        'Body' => json_encode(array(
+                            'class'    => 'MyClass',
+                            'content'  => serialize('aa'),
+                            'metadata' => array('foo' => 'bar')
+                        )),
+                        'MessageId'     => 'id_123',
+                        'ReceiptHandle' => 'receipt_123',
+                        'MD5OfBody'     => 'funny'
+                    )
+                )
+            )));
+
+        $this->jobPluginManager->expects($this->once())
+                               ->method('get')
+                               ->with('MyClass')
+                               ->will($this->returnValue(new Asset\SimpleJob()));
+
+        $job = $this->sqsQueue->pop();
+
+        $this->assertInstanceOf('SlmQueueSqsTest\Asset\SimpleJob', $job);
+        $this->assertEquals('aa', $job->getContent());
+        $this->assertEquals(array(
+            'id'            => 'id_123',
+            'receiptHandle' => 'receipt_123',
+            'md5'           => 'funny',
+            'foo'           => 'bar'
+        ), $job->getMetadata());
     }
 }

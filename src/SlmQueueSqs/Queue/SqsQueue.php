@@ -197,7 +197,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
                     'id'            => $message['MessageId'],
                     'receiptHandle' => $message['ReceiptHandle'],
                     'md5'           => $message['MD5OfBody']
-                )
+                ) + $data['metadata']
             );
         }
 

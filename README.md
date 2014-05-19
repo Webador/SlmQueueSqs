@@ -56,6 +56,20 @@ SlmQueueSqs does not offer any features to create queues. You should use the off
 
 Please refer to [the documentation of the official AWS ZF2 module](https://github.com/aws/aws-sdk-php-zf2#configuration).
 
+### Setting metadata
+
+Like other SlmQueue providers, you can set specific metadata to a job. Please note that this is different from the
+[built-in message attributes](http://aws.amazon.com/fr/blogs/aws/simple-queue-service-message-attributes/) that was
+introduced in SQS in May 2014. SlmQueueSqs does not support this currently, but this is very similar to the metadata
+in SlmQueue.
+
+Please note that, when jobs are retrieved using the worker, some metadata pulled from SQS are automatically injected
+into your job. Therefore, you are encouraged to NOT use those keys, as your metadata will override SQS metadata:
+
+* `id`: this is the SQS message id.
+* `receiptHandle`: this is the SQS receipt handle, that is used to delete a job, among other thing.
+* `md5`: this is the MD5 signature of the message, calculated by AWS. You could use that to validate your messages.
+
 ### Adding queues
 
 SlmQueueSqs provides an interface for SQS queues that extends `SlmQueue\Queue\QueueInterface`, and provides in
