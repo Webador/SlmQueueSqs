@@ -158,6 +158,67 @@ class SqsQueueTest extends TestCase
         $this->assertEquals(md5('baz'), $jobs[1]->getMetadata('md5'));
     }
 
+    public function testCanSpliceJobsIfLimitIsExceeded()
+    {
+        $jobs = array(
+            new Asset\SimpleJob(array('pos' => 1)),
+            new Asset\SimpleJob(array('pos' => 2)),
+            new Asset\SimpleJob(array('pos' => 3)),
+            new Asset\SimpleJob(array('pos' => 4)),
+            new Asset\SimpleJob(array('pos' => 5)),
+            new Asset\SimpleJob(array('pos' => 6)),
+            new Asset\SimpleJob(array('pos' => 7)),
+            new Asset\SimpleJob(array('pos' => 8)),
+            new Asset\SimpleJob(array('pos' => 9)),
+            new Asset\SimpleJob(array('pos' => 10)),
+            new Asset\SimpleJob(array('pos' => 11))
+        );
+
+        $firstSuccessful = array();
+        
+        for ($i = 0 ; $i != 10 ; ++$i) {
+            $firstSuccessful[] = array(
+                'Id'               => $i,
+                'MessageId'        => $i + 1,
+                'MD5OfMessageBody' => md5('foo')
+            );
+        }
+
+        $firstResult = new ResourceModel(array(
+            'Successful' => $firstSuccessful
+        ));
+
+        $secondResult = new ResourceModel(array(
+            'Successful' => array(
+                0 => array(
+                    'Id'        => 0,
+                    'MessageId' => 1,
+                    'MD5OfMessageBody' => md5 ('fpp')
+                )
+            )
+        ));
+
+        $this->sqsClient->expects($this->at(0))
+                        ->method('sendMessageBatch')
+                        ->with($this->callback(function($parameters) {
+                $this->assertCount(10, $parameters['Entries']);
+                return true;
+            }))
+                        ->will($this->returnValue($firstResult));
+
+        $this->sqsClient->expects($this->at(1))
+                        ->method('sendMessageBatch')
+                        ->with($this->callback(function($parameters) {
+                $this->assertCount(1, $parameters['Entries']);
+                return true;
+            }))
+                        ->will($this->returnValue($secondResult));
+
+        $this->sqsQueue->batchPush($jobs);
+
+        $this->assertCount(11, $jobs);
+    }
+
     public function testMetadataIsPopped()
     {
         $this->sqsClient->expects($this->once())
