@@ -175,7 +175,7 @@ class SqsQueueTest extends TestCase
         );
 
         $firstSuccessful = array();
-        
+
         for ($i = 0 ; $i != 10 ; ++$i) {
             $firstSuccessful[] = array(
                 'Id'               => $i,
@@ -198,18 +198,20 @@ class SqsQueueTest extends TestCase
             )
         ));
 
+        $self = $this;
+
         $this->sqsClient->expects($this->at(0))
                         ->method('sendMessageBatch')
-                        ->with($this->callback(function($parameters) {
-                $this->assertCount(10, $parameters['Entries']);
+                        ->with($this->callback(function($parameters) use ($self) {
+                $self->assertCount(10, $parameters['Entries']);
                 return true;
             }))
                         ->will($this->returnValue($firstResult));
 
         $this->sqsClient->expects($this->at(1))
                         ->method('sendMessageBatch')
-                        ->with($this->callback(function($parameters) {
-                $this->assertCount(1, $parameters['Entries']);
+                        ->with($this->callback(function($parameters) use ($self) {
+                $self->assertCount(1, $parameters['Entries']);
                 return true;
             }))
                         ->will($this->returnValue($secondResult));
