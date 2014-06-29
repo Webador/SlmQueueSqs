@@ -1,3 +1,8 @@
+# 0.3.2
+
+- `batchPush` now automatically splices jobs if you submit more than 10 jobs (which is the max limit per SQS
+batch), so that you can submit as many jobs you want, and SlmQueueSqs takes care of sending everything.
+
 # 0.3.1
 
 - Custom metadata set to a job is now correctly retrieved when jobs are pushed, along SQS own metadata.
