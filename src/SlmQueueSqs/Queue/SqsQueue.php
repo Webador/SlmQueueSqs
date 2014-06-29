@@ -126,6 +126,16 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
      */
     public function batchPush(array $jobs, array $options = array())
     {
+        // SQS can only handle up to 10 jobs, so if we have more jobs, we handle them in slices
+        if (count($jobs) > 10) {
+            do {
+                $splicedJobs = array_splice($jobs, 0, 10);
+                $this->batchPush($splicedJobs, $options);
+            } while (count($splicedJobs) >= 10);
+
+            return;
+        }
+
         $parameters = array(
             'QueueUrl' => $this->queueOptions->getQueueUrl(),
             'Entries'  => array()
