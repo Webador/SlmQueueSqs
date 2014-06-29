@@ -1,3 +1,7 @@
+# 0.4.0
+
+- [BC] Bump SlmQueue dependency to 0.4
+
 # 0.3.1
 
 - Custom metadata set to a job is now correctly retrieved when jobs are pushed, along SQS own metadata.
