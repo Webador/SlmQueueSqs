@@ -188,16 +188,13 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
 
         $jobs = array();
         foreach ($messages as $message) {
-            $data = json_decode($message['Body'], true);
-
             $jobs[] = $this->unserializeJob(
-                $data['class'],
-                $data['content'],
+                $message['Body'],
                 array(
                     'id'            => $message['MessageId'],
                     'receiptHandle' => $message['ReceiptHandle'],
                     'md5'           => $message['MD5OfBody']
-                ) + $data['metadata']
+                )
             );
         }
 
