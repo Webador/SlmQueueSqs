@@ -1,6 +1,6 @@
 # 0.4.0
 
-- [BC] Bump SlmQueue dependency to 0.4
+- [BC] Bump SlmQueue dependency to 0.4. Please read SlmQueue CHANGELOG for further information
 
 # 0.3.1
 
