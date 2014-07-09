@@ -60,7 +60,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     {
         $parameters = array(
             'QueueUrl'     => $this->queueOptions->getQueueUrl(),
-            'MessageBody'  => $job->jsonSerialize(),
+            'MessageBody'  => $this->serializeJob($job),
             'DelaySeconds' => isset($options['delay_seconds']) ? $options['delay_seconds'] : null
         );
 
@@ -145,7 +145,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
         foreach ($jobs as $key => $job) {
             $jobParameters = array(
                 'Id'           => $key, // Identifier of the message in the batch
-                'MessageBody'  => $job->jsonSerialize(),
+                'MessageBody'  => $this->serializeJob($job),
                 'DelaySeconds' => isset($options[$key]['delay_seconds']) ? $options[$key]['delay_seconds'] : null
             );
 
@@ -198,16 +198,13 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
 
         $jobs = array();
         foreach ($messages as $message) {
-            $data = json_decode($message['Body'], true);
-
-            $jobs[] = $this->createJob(
-                $data['class'],
-                $data['content'],
+            $jobs[] = $this->unserializeJob(
+                $message['Body'],
                 array(
                     'id'            => $message['MessageId'],
                     'receiptHandle' => $message['ReceiptHandle'],
                     'md5'           => $message['MD5OfBody']
-                ) + $data['metadata']
+                )
             );
         }
 

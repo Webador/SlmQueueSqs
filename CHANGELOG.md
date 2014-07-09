@@ -1,3 +1,7 @@
+# 0.4.0
+
+- [BC] Bump SlmQueue dependency to 0.4. Please read SlmQueue CHANGELOG for further information
+
 # 0.3.2
 
 - `batchPush` now automatically splices jobs if you submit more than 10 jobs (which is the max limit per SQS

@@ -62,18 +62,13 @@ class SqsQueueTest extends TestCase
 
     public function testAssertNullParametersGetStripped()
     {
-        $messageBody = serialize(array('foo' => 'bar'));
-
-        $job = $this->getMock('SlmQueue\Job\JobInterface');
-        $job->expects($this->any())
-            ->method('jsonSerialize')
-            ->will($this->returnValue($messageBody));
+        $job = new Asset\SimpleJob();
 
         $this->sqsClient->expects($this->once())
                         ->method('sendMessage')
                         ->with(array(
                             'QueueUrl'    => 'https://sqs.endpoint.com',
-                            'MessageBody' => $messageBody
+                            'MessageBody' => $this->sqsQueue->serializeJob($job)
                         ));
 
         $this->sqsQueue->push($job, array(
@@ -93,8 +88,8 @@ class SqsQueueTest extends TestCase
         $this->sqsClient->expects($this->once())
                         ->method('sendMessage')
                         ->with(array(
-                            'QueueUrl' => 'https://sqs.endpoint.com',
-                            'MessageBody' => $job->jsonSerialize()
+                            'QueueUrl'    => 'https://sqs.endpoint.com',
+                            'MessageBody' => $this->sqsQueue->serializeJob($job)
                         ))
                         ->will($this->returnValue($result));
 
@@ -135,11 +130,11 @@ class SqsQueueTest extends TestCase
             'Entries'  => array(
                 array(
                     'Id'          => 0,
-                    'MessageBody' => $jobs[0]->jsonSerialize()
+                    'MessageBody' => $this->sqsQueue->serializeJob($jobs[0])
                 ),
                 array(
                     'Id'          => 1,
-                    'MessageBody' => $jobs[1]->jsonSerialize()
+                    'MessageBody' => $this->sqsQueue->serializeJob($jobs[1])
                 )
             )
         ))
@@ -229,7 +224,7 @@ class SqsQueueTest extends TestCase
                 'Messages' => array(
                     array(
                         'Body' => json_encode(array(
-                            'class'    => 'MyClass',
+                            'name'     => 'MyClass',
                             'content'  => serialize('aa'),
                             'metadata' => array('foo' => 'bar')
                         )),
