@@ -12,7 +12,7 @@ class SqsWorkerControllerTest extends TestCase
     {
         $queue         = $this->getMock('SlmQueue\Queue\QueueInterface');
         $worker        = $this->getMock('SlmQueue\Worker\WorkerInterface');
-        $pluginManager = $this->getMock('SlmQueue\Queue\QueuePluginManager', [], [], '', false);
+        $pluginManager = $this->getMock('SlmQueue\Queue\QueuePluginManager', array(), array(), '', false);
 
         $pluginManager->expects($this->once())
                       ->method('get')
