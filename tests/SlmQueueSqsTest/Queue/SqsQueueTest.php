@@ -219,17 +219,17 @@ class SqsQueueTest extends TestCase
     public function testCanDeleteSpliceJobsIfLimitIsExceeded()
     {
         $jobs = array(
-            new Asset\SimpleJob(array('pos' => 1)),
-            new Asset\SimpleJob(array('pos' => 2)),
-            new Asset\SimpleJob(array('pos' => 3)),
-            new Asset\SimpleJob(array('pos' => 4)),
-            new Asset\SimpleJob(array('pos' => 5)),
-            new Asset\SimpleJob(array('pos' => 6)),
-            new Asset\SimpleJob(array('pos' => 7)),
-            new Asset\SimpleJob(array('pos' => 8)),
-            new Asset\SimpleJob(array('pos' => 9)),
-            new Asset\SimpleJob(array('pos' => 10)),
-            new Asset\SimpleJob(array('pos' => 11))
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob()
         );
 
         $firstSuccessful = array();
