@@ -216,6 +216,16 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
      */
     public function batchDelete(array $jobs)
     {
+        // SQS can only handle up to 10 jobs, so if we have more jobs, we handle them in slices
+        if (count($jobs) > 10) {
+            do {
+                $splicedJobs = array_splice($jobs, 0, 10);
+                $this->batchDelete($splicedJobs);
+            } while (count($splicedJobs) >= 10);
+
+            return;
+        }
+
         $parameters = array(
             'QueueUrl' => $this->queueOptions->getQueueUrl(),
             'Entries'  => array()

@@ -30,7 +30,7 @@ class SqsQueueTest extends TestCase
     {
         $this->sqsClient = $this->getMock(
             'Aws\Sqs\SqsClient',
-            array('getQueueUrl', 'sendMessage', 'sendMessageBatch', 'receiveMessage'),
+            array('getQueueUrl', 'sendMessage', 'sendMessageBatch', 'deleteMessageBatch', 'receiveMessage'),
             array(),
             '',
             false
@@ -153,20 +153,20 @@ class SqsQueueTest extends TestCase
         $this->assertEquals(md5('baz'), $jobs[1]->getMetadata('md5'));
     }
 
-    public function testCanSpliceJobsIfLimitIsExceeded()
+    public function testCanPushSpliceJobsIfLimitIsExceeded()
     {
         $jobs = array(
-            new Asset\SimpleJob(array('pos' => 1)),
-            new Asset\SimpleJob(array('pos' => 2)),
-            new Asset\SimpleJob(array('pos' => 3)),
-            new Asset\SimpleJob(array('pos' => 4)),
-            new Asset\SimpleJob(array('pos' => 5)),
-            new Asset\SimpleJob(array('pos' => 6)),
-            new Asset\SimpleJob(array('pos' => 7)),
-            new Asset\SimpleJob(array('pos' => 8)),
-            new Asset\SimpleJob(array('pos' => 9)),
-            new Asset\SimpleJob(array('pos' => 10)),
-            new Asset\SimpleJob(array('pos' => 11))
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob(),
+            new Asset\SimpleJob()
         );
 
         $firstSuccessful = array();
@@ -212,6 +212,69 @@ class SqsQueueTest extends TestCase
                         ->will($this->returnValue($secondResult));
 
         $this->sqsQueue->batchPush($jobs);
+
+        $this->assertCount(11, $jobs);
+    }
+
+    public function testCanDeleteSpliceJobsIfLimitIsExceeded()
+    {
+        $jobs = array(
+            new Asset\SimpleJob(array('pos' => 1)),
+            new Asset\SimpleJob(array('pos' => 2)),
+            new Asset\SimpleJob(array('pos' => 3)),
+            new Asset\SimpleJob(array('pos' => 4)),
+            new Asset\SimpleJob(array('pos' => 5)),
+            new Asset\SimpleJob(array('pos' => 6)),
+            new Asset\SimpleJob(array('pos' => 7)),
+            new Asset\SimpleJob(array('pos' => 8)),
+            new Asset\SimpleJob(array('pos' => 9)),
+            new Asset\SimpleJob(array('pos' => 10)),
+            new Asset\SimpleJob(array('pos' => 11))
+        );
+
+        $firstSuccessful = array();
+
+        for ($i = 0 ; $i != 10 ; ++$i) {
+            $firstSuccessful[] = array(
+                'Id'               => $i,
+                'MessageId'        => $i + 1,
+                'MD5OfMessageBody' => md5('foo')
+            );
+        }
+
+        $firstResult = new ResourceModel(array(
+            'Successful' => $firstSuccessful
+        ));
+
+        $secondResult = new ResourceModel(array(
+            'Successful' => array(
+                0 => array(
+                    'Id'        => 0,
+                    'MessageId' => 1,
+                    'MD5OfMessageBody' => md5 ('fpp')
+                )
+            )
+        ));
+
+        $self = $this;
+
+        $this->sqsClient->expects($this->at(0))
+            ->method('deleteMessageBatch')
+            ->with($this->callback(function($parameters) use ($self) {
+                        $self->assertCount(10, $parameters['Entries']);
+                        return true;
+                    }))
+            ->will($this->returnValue($firstResult));
+
+        $this->sqsClient->expects($this->at(1))
+            ->method('deleteMessageBatch')
+            ->with($this->callback(function($parameters) use ($self) {
+                        $self->assertCount(1, $parameters['Entries']);
+                        return true;
+                    }))
+            ->will($this->returnValue($secondResult));
+
+        $this->sqsQueue->batchDelete($jobs);
 
         $this->assertCount(11, $jobs);
     }
