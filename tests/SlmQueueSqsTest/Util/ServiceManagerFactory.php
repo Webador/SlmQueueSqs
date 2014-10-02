@@ -19,8 +19,8 @@
 
 namespace SlmQueueSqsTest\Util;
 
-use Zend\ServiceManager\ServiceManager;
 use Zend\Mvc\Service\ServiceManagerConfig;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Utility used to retrieve a freshly bootstrapped application's service manager

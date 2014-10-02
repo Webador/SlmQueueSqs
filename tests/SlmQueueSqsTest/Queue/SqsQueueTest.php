@@ -2,12 +2,11 @@
 
 namespace SlmQueueSqsTest\Queue;
 
-use PHPUnit_Framework_TestCase as TestCase;
 use Guzzle\Service\Resource\Model as ResourceModel;
+use PHPUnit_Framework_TestCase as TestCase;
 use SlmQueueSqs\Options\SqsQueueOptions;
 use SlmQueueSqs\Queue\SqsQueue;
 use SlmQueueSqsTest\Asset;
-use Zend\ServiceManager\ServiceManager;
 
 class SqsQueueTest extends TestCase
 {

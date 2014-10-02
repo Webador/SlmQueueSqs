@@ -6,6 +6,7 @@ use Exception;
 use SlmQueue\Job\JobInterface;
 use SlmQueue\Queue\QueueInterface;
 use SlmQueue\Worker\AbstractWorker;
+use SlmQueue\Worker\WorkerEvent;
 use SlmQueueSqs\Queue\SqsQueueInterface;
 
 /**
@@ -19,7 +20,7 @@ class SqsWorker extends AbstractWorker
     public function processJob(JobInterface $job, QueueInterface $queue)
     {
         if (!$queue instanceof SqsQueueInterface) {
-            return;
+            return WorkerEvent::JOB_STATUS_UNKNOWN;
         }
 
         // In SQS, if an error occurs (exception for instance), the job is automatically reinserted
@@ -28,10 +29,11 @@ class SqsWorker extends AbstractWorker
         try {
             $job->execute();
             $queue->delete($job);
-            return static::JOB_SUCCESSFUL;
+
+            return WorkerEvent::JOB_STATUS_SUCCESS;
         } catch (Exception $exception) {
             // Do nothing, the job will be reinserted automatically for another try
-            return static::JOB_RESCHEDULED;
+            return WorkerEvent::JOB_STATUS_FAILURE_RECOVERABLE;
         }
     }
 }
