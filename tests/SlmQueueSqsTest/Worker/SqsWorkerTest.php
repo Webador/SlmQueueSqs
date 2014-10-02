@@ -16,10 +16,7 @@ class SqsWorkerTest extends TestCase
         $job->expects($this->once())->method('execute');
         $queue->expects($this->once())->method('delete')->with($job);
 
-        $worker = new SqsWorker(
-            $this->getMock('SlmQueue\Queue\QueuePluginManager'),
-            new WorkerOptions()
-        );
+        $worker = new SqsWorker(new WorkerOptions());
 
         $worker->processJob($job, $queue);
     }

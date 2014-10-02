@@ -27,7 +27,7 @@ class SqsWorkerController extends AbstractWorkerController
             'wait_time_seconds'  => isset($params['waitTime']) ? $params['waitTime'] : null
         );
 
-        $queue = $options['queue'];
+        $queue = $this->queuePluginManager->get($options['queue']);
 
         try {
             $result = $this->worker->processQueue($queue, array_filter($options));
@@ -37,7 +37,7 @@ class SqsWorkerController extends AbstractWorkerController
 
         return sprintf(
             "Finished worker for queue '%s' with %s jobs\n",
-            $queue,
+            $options['queue'],
             $result
         );
     }
