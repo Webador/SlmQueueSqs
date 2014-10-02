@@ -28,8 +28,10 @@ class SqsWorker extends AbstractWorker
         try {
             $job->execute();
             $queue->delete($job);
+            return static::JOB_SUCCESSFUL;
         } catch (Exception $exception) {
             // Do nothing, the job will be reinserted automatically for another try
+            return static::JOB_RESCHEDULED;
         }
     }
 }
