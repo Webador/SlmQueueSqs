@@ -30,15 +30,11 @@ class SqsWorkerController extends AbstractWorkerController
         $queue = $this->queuePluginManager->get($options['queue']);
 
         try {
-            $result = $this->worker->processQueue($queue, array_filter($options));
+            $messages = $this->worker->processQueue($queue, array_filter($options));
         } catch (ExceptionInterface $e) {
             throw new WorkerProcessException('Caught exception while processing queue', $e->getCode(), $e);
         }
 
-        return sprintf(
-            "Finished worker for queue '%s' with %s jobs\n",
-            $options['queue'],
-            $result
-        );
+        return $this->formatOutput($options['queue'], $messages);
     }
 }
