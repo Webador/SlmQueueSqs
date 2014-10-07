@@ -27,10 +27,10 @@ class SqsWorkerControllerTest extends TestCase
         $worker->expects($this->once())
                ->method('processQueue')
                ->with($queue)
-               ->will($this->returnValue(1));
+               ->will($this->returnValue(array('One state')));
 
         $result = $controller->processAction();
 
-        $this->assertEquals("Finished worker for queue 'newsletter' with 1 jobs\n", $result);
+        $this->assertStringEndsWith("One state\n", $result);
     }
 }

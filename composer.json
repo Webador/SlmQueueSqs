@@ -40,7 +40,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "0.4.0-beta1"
+            "dev-master": "0.4.0-beta2"
         }
     },
     "autoload": {

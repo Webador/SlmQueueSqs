@@ -1,4 +1,8 @@
-# 0.4.0
+# 0.4.0-beta2
+
+- Update dependency to SlmQueue 0.4.0-beta2
+
+# 0.4.0-beta1
 
 - [BC] Bump SlmQueue dependency to 0.4. Please read SlmQueue CHANGELOG for further information
 - `batchDelete` now also automatically splice jobs if you submit more than 10 jobs.
