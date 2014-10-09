@@ -1,3 +1,9 @@
+# 0.4.0-beta3
+
+- [BC] Due to changes in SlmQueue ([changelog](https://github.com/juriansluiman/SlmQueue/blob/master/CHANGELOG.md))
+existing jobs won't be able to be executed correctly.
+
+
 # 0.4.0-beta2
 
 - Update dependency to SlmQueue 0.4.0-beta2
