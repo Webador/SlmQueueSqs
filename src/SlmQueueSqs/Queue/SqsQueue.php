@@ -67,8 +67,8 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
         $result = $this->sqsClient->sendMessage(array_filter($parameters));
 
         $job->setMetadata(array(
-            'id'  => $result['MessageId'],
-            'md5' => $result['MD5OfMessageBody']
+            '__id__' => $result['MessageId'],
+            'md5'    => $result['MD5OfMessageBody']
         ));
     }
 
@@ -160,8 +160,8 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
         foreach ($messages as $message) {
             $batchId = $message['Id'];
             $jobs[$batchId]->setMetadata(array(
-                'id'  => $message['MessageId'],
-                'md5' => $message['MD5OfMessageBody']
+                '__id__' => $message['MessageId'],
+                'md5'    => $message['MD5OfMessageBody']
             ));
         }
     }
@@ -201,7 +201,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
             $jobs[] = $this->unserializeJob(
                 $message['Body'],
                 array(
-                    'id'            => $message['MessageId'],
+                    '__id__'        => $message['MessageId'],
                     'receiptHandle' => $message['ReceiptHandle'],
                     'md5'           => $message['MD5OfBody']
                 )

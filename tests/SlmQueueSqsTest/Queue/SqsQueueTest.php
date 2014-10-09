@@ -95,7 +95,7 @@ class SqsQueueTest extends TestCase
         $this->sqsQueue->push($job);
 
         $this->assertEquals(1, $job->getId());
-        $this->assertEquals(1, $job->getMetadata('id'));
+        $this->assertEquals(1, $job->getMetadata('__id__'));
         $this->assertEquals(md5('baz'), $job->getMetadata('md5'));
     }
 
@@ -144,11 +144,11 @@ class SqsQueueTest extends TestCase
         $this->assertCount(2, $jobs);
 
         $this->assertEquals(1, $jobs[0]->getId());
-        $this->assertEquals(1, $jobs[0]->getMetadata('id'));
+        $this->assertEquals(1, $jobs[0]->getMetadata('__id__'));
         $this->assertEquals(md5('bar'), $jobs[0]->getMetadata('md5'));
 
         $this->assertEquals(2, $jobs[1]->getId());
-        $this->assertEquals(2, $jobs[1]->getMetadata('id'));
+        $this->assertEquals(2, $jobs[1]->getMetadata('__id__'));
         $this->assertEquals(md5('baz'), $jobs[1]->getMetadata('md5'));
     }
 
@@ -286,9 +286,8 @@ class SqsQueueTest extends TestCase
                 'Messages' => array(
                     array(
                         'Body' => json_encode(array(
-                            'name'     => 'MyClass',
                             'content'  => serialize('aa'),
-                            'metadata' => array('foo' => 'bar')
+                            'metadata' => array('__name__' => 'MyClass', 'foo' => 'bar')
                         )),
                         'MessageId'     => 'id_123',
                         'ReceiptHandle' => 'receipt_123',
@@ -307,7 +306,8 @@ class SqsQueueTest extends TestCase
         $this->assertInstanceOf('SlmQueueSqsTest\Asset\SimpleJob', $job);
         $this->assertEquals('aa', $job->getContent());
         $this->assertEquals(array(
-            'id'            => 'id_123',
+            '__id__'        => 'id_123',
+            '__name__'      => 'MyClass',
             'receiptHandle' => 'receipt_123',
             'md5'           => 'funny',
             'foo'           => 'bar'
