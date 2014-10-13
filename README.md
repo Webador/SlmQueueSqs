@@ -6,7 +6,7 @@ SlmQueueSqs
 [![Latest Unstable Version](https://poser.pugx.org/slm/queue-sqs/v/unstable.png)](https://packagist.org/packages/slm/queue-sqs)
 [![Total Downloads](https://poser.pugx.org/slm/queue-sqs/downloads.png)](https://packagist.org/packages/slm/queue-sqs)
 
-Version 0.3.0-dev Created by Jurian Sluiman and Michaël Gallego
+Version 0.4.0 Created by Jurian Sluiman and Michaël Gallego
 
 Requirements
 ------------
@@ -35,7 +35,7 @@ add the following line into your `composer.json` file:
 
 ```json
 "require": {
-	"slm/queue-sqs": "0.3.*"
+	"slm/queue-sqs": "0.4.*"
 }
 ```
 
