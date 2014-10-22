@@ -215,6 +215,14 @@ class SqsQueueTest extends TestCase
         $this->assertCount(11, $jobs);
     }
 
+    public function testNeverBatchPushIfNoJobInArray()
+    {
+        $this->sqsClient->expects($this->never())
+                       ->method('sendMessageBatch');
+
+        $this->sqsQueue->batchPush([]);
+    }
+
     public function testCanDeleteSpliceJobsIfLimitIsExceeded()
     {
         $jobs = array(
@@ -276,6 +284,14 @@ class SqsQueueTest extends TestCase
         $this->sqsQueue->batchDelete($jobs);
 
         $this->assertCount(11, $jobs);
+    }
+
+    public function testNeverBatchDeleteIfNoJobInArray()
+    {
+        $this->sqsClient->expects($this->never())
+                        ->method('deleteMessageBatch');
+
+        $this->sqsQueue->batchDelete([]);
     }
 
     public function testMetadataIsPopped()

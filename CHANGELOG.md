@@ -1,3 +1,7 @@
+# 0.4.1
+
+- Fix a bug when batch pushing/batch deleting a multiple of 10 jobs into the queue.
+
 # 0.4.0
 
 - First stable release in 0.4.x branch
