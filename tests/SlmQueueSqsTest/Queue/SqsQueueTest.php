@@ -220,7 +220,7 @@ class SqsQueueTest extends TestCase
         $this->sqsClient->expects($this->never())
                        ->method('sendMessageBatch');
 
-        $this->sqsQueue->batchPush([]);
+        $this->sqsQueue->batchPush(array());
     }
 
     public function testCanDeleteSpliceJobsIfLimitIsExceeded()
@@ -291,7 +291,7 @@ class SqsQueueTest extends TestCase
         $this->sqsClient->expects($this->never())
                         ->method('deleteMessageBatch');
 
-        $this->sqsQueue->batchDelete([]);
+        $this->sqsQueue->batchDelete(array());
     }
 
     public function testMetadataIsPopped()
