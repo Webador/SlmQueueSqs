@@ -1,6 +1,10 @@
-# 0.4.1
+# 0.4.2
 
 - SlmQueueSqs now rethrow SQS exceptions instead of silently reinserting the job without notice.
+
+# 0.4.1
+
+- Fix a bug when batch pushing/batch deleting a multiple of 10 jobs into the queue.
 
 # 0.4.0
 

@@ -136,6 +136,11 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
             return;
         }
 
+        // SQS throws an exception if no jobs are inserted, which can happen due to the slicing method
+        if (empty($jobs)) {
+            return;
+        }
+
         $parameters = array(
             'QueueUrl' => $this->queueOptions->getQueueUrl(),
             'Entries'  => array()
@@ -223,6 +228,11 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
                 $this->batchDelete($splicedJobs);
             } while (count($splicedJobs) >= 10);
 
+            return;
+        }
+
+        // SQS throws an exception if no jobs are inserted, which can happen due to the slicing method
+        if (empty($jobs)) {
             return;
         }
 
