@@ -2,6 +2,7 @@
 
 namespace SlmQueueSqsTest\Worker;
 
+use Aws\Sqs\Exception\SqsException;
 use PHPUnit_Framework_TestCase as TestCase;
 use SlmQueue\Worker\WorkerEvent;
 use SlmQueueSqs\Worker\SqsWorker;
@@ -55,4 +56,19 @@ class SqsWorkerTest extends TestCase
         $this->assertEquals(WorkerEvent::JOB_STATUS_FAILURE_RECOVERABLE, $status);
     }
 
+    public function testRethrowSqsException()
+    {
+        $this->setExpectedException('Aws\Sqs\Exception\SqsException');
+
+        $queue = $this->getMock('SlmQueueSqs\Queue\SqsQueueInterface');
+        $job   = $this->getMock('SlmQueue\Job\JobInterface');
+
+        $job->expects($this->once())
+            ->method('execute')
+            ->will($this->throwException(new SqsException()));
+
+        $queue->expects($this->never())->method('delete');
+
+        $this->worker->processJob($job, $queue);
+    }
 }
