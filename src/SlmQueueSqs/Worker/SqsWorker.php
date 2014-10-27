@@ -2,6 +2,7 @@
 
 namespace SlmQueueSqs\Worker;
 
+use Aws\Sqs\Exception\SqsException;
 use Exception;
 use SlmQueue\Job\JobInterface;
 use SlmQueue\Queue\QueueInterface;
@@ -31,6 +32,10 @@ class SqsWorker extends AbstractWorker
             $queue->delete($job);
 
             return WorkerEvent::JOB_STATUS_SUCCESS;
+        } catch (SqsException $sqsException) {
+            // We want to retrigger SQS exception as they may include useful debugging information like lack of
+            // permissions
+            throw $sqsException;
         } catch (Exception $exception) {
             // Do nothing, the job will be reinserted automatically for another try
             return WorkerEvent::JOB_STATUS_FAILURE_RECOVERABLE;

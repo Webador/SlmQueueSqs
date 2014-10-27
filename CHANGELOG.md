@@ -1,3 +1,7 @@
+# 0.4.1
+
+- SlmQueueSqs now rethrow SQS exceptions instead of silently reinserting the job without notice.
+
 # 0.4.0
 
 - First stable release in 0.4.x branch
