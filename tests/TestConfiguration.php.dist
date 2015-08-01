@@ -18,7 +18,7 @@
  */
 return array(
     'modules' => array(
-        'Aws',
+        'AwsModule',
         'SlmQueue',
         'SlmQueueSqs'
     ),

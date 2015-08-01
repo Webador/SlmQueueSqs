@@ -18,9 +18,11 @@
  */
 return array(
     'aws' => array(
-        'region' => 'eu-west-1',
-        'key'    => 'my-key',
-        'secret' => 'my-secret'
+        'credentials' => array(
+            'key'    => 'my-key',
+            'secret' => 'my-secret'
+        ),
+        'region' => 'eu-west-1'
     ),
 
     'slm_queue' => array(

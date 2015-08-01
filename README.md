@@ -6,7 +6,7 @@ SlmQueueSqs
 [![Latest Unstable Version](https://poser.pugx.org/slm/queue-sqs/v/unstable.png)](https://packagist.org/packages/slm/queue-sqs)
 [![Total Downloads](https://poser.pugx.org/slm/queue-sqs/downloads.png)](https://packagist.org/packages/slm/queue-sqs)
 
-Version 0.4.0 Created by Jurian Sluiman and Michaël Gallego
+Version 0.5.0 Created by Jurian Sluiman and Michaël Gallego
 
 Requirements
 ------------
@@ -35,11 +35,11 @@ add the following line into your `composer.json` file:
 
 ```json
 "require": {
-	"slm/queue-sqs": "0.4.*"
+	"slm/queue-sqs": "0.5.*"
 }
 ```
 
-Then, enable the module by adding `SlmQueueSqs` in your application.config.php file (you must also add the `Aws` key
+Then, enable the module by adding `SlmQueueSqs` in your application.config.php file (you must also add the `AwsModule` key
 for enabling the AWS ZF2 module.
 
 > Starting from 0.3.0, SlmQueueSqs now internally uses the official AWS Zend Framework 2 module, so you can write
