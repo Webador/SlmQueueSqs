@@ -2,7 +2,9 @@
 
 namespace SlmQueueSqs\Factory;
 
+use SlmQueue\Queue\QueuePluginManager;
 use SlmQueueSqs\Controller\SqsWorkerController;
+use SlmQueueSqs\Worker\SqsWorker;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -18,8 +20,8 @@ class SqsWorkerControllerFactory implements FactoryInterface
     {
         $parentLocator = $serviceLocator->getServiceLocator();
 
-        $worker  = $parentLocator->get('SlmQueueSqs\Worker\SqsWorker');
-        $manager = $parentLocator->get('SlmQueue\Queue\QueuePluginManager');
+        $worker  = $parentLocator->get(SqsWorker::class);
+        $manager = $parentLocator->get(QueuePluginManager::class);
 
         return new SqsWorkerController($worker, $manager);
     }

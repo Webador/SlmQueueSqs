@@ -2,6 +2,8 @@
 
 namespace SlmQueueSqs\Factory;
 
+use Aws\Sdk as Aws;
+use SlmQueue\Job\JobPluginManager;
 use SlmQueueSqs\Options\SqsQueueOptions;
 use SlmQueueSqs\Queue\SqsQueue;
 use Zend\ServiceManager\FactoryInterface;
@@ -18,8 +20,8 @@ class SqsQueueFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator, $name = '', $requestedName = '')
     {
         $parentLocator    = $serviceLocator->getServiceLocator();
-        $sqsClient        = $parentLocator->get('Aws')->get('Sqs');
-        $jobPluginManager = $parentLocator->get('SlmQueue\Job\JobPluginManager');
+        $sqsClient        = $parentLocator->get(Aws::class)->create('Sqs');
+        $jobPluginManager = $parentLocator->get(JobPluginManager::class);
 
         // Let's see if we have options for this specific queue
         $config  = $parentLocator->get('Config');
