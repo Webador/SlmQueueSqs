@@ -2,7 +2,6 @@
 
 namespace SlmQueueSqsTest\Queue;
 
-use Guzzle\Service\Resource\Model as ResourceModel;
 use PHPUnit_Framework_TestCase as TestCase;
 use SlmQueueSqs\Options\SqsQueueOptions;
 use SlmQueueSqs\Queue\SqsQueue;
@@ -79,10 +78,10 @@ class SqsQueueTest extends TestCase
     {
         $job = new Asset\SimpleJob(array('foo' => 'bar'));
 
-        $result = new ResourceModel(array(
+        $result = array(
             'MessageId'        => 1,
             'MD5OfMessageBody' => md5('baz')
-        ));
+        );
 
         $this->sqsClient->expects($this->once())
                         ->method('sendMessage')
@@ -106,7 +105,7 @@ class SqsQueueTest extends TestCase
             new Asset\SimpleJob(array('bar' => 'baz'))
         );
 
-        $result = new ResourceModel(array(
+        $result = array(
             'Successful' => array(
                 0 => array(
                     'Id'        => 0,
@@ -120,7 +119,7 @@ class SqsQueueTest extends TestCase
                     'MD5OfMessageBody' => md5('baz')
                 )
             )
-        ));
+        );
 
         $this->sqsClient->expects($this->once())
             ->method('sendMessageBatch')
@@ -178,11 +177,11 @@ class SqsQueueTest extends TestCase
             );
         }
 
-        $firstResult = new ResourceModel(array(
+        $firstResult = array(
             'Successful' => $firstSuccessful
-        ));
+        );
 
-        $secondResult = new ResourceModel(array(
+        $secondResult = array(
             'Successful' => array(
                 0 => array(
                     'Id'        => 0,
@@ -190,7 +189,7 @@ class SqsQueueTest extends TestCase
                     'MD5OfMessageBody' => md5 ('fpp')
                 )
             )
-        ));
+        );
 
         $self = $this;
 
@@ -249,11 +248,11 @@ class SqsQueueTest extends TestCase
             );
         }
 
-        $firstResult = new ResourceModel(array(
+        $firstResult = array(
             'Successful' => $firstSuccessful
-        ));
+        );
 
-        $secondResult = new ResourceModel(array(
+        $secondResult = array(
             'Successful' => array(
                 0 => array(
                     'Id'        => 0,
@@ -261,7 +260,7 @@ class SqsQueueTest extends TestCase
                     'MD5OfMessageBody' => md5 ('fpp')
                 )
             )
-        ));
+        );
 
         $self = $this;
 
