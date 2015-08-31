@@ -20,7 +20,7 @@ class SqsQueueFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator, $name = '', $requestedName = '')
     {
         $parentLocator    = $serviceLocator->getServiceLocator();
-        $sqsClient        = $parentLocator->get(Aws::class)->create('Sqs');
+        $sqsClient        = $parentLocator->get(Aws::class)->createSqs();
         $jobPluginManager = $parentLocator->get(JobPluginManager::class);
 
         // Let's see if we have options for this specific queue
@@ -28,6 +28,7 @@ class SqsQueueFactory implements FactoryInterface
         $config  = $config['slm_queue']['queues'];
 
         $options = new SqsQueueOptions(isset($config[$requestedName]) ? $config[$requestedName] : array());
+
 
         return new SqsQueue($sqsClient, $options, $requestedName, $jobPluginManager);
     }
