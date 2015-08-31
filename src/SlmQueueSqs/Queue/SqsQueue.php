@@ -197,7 +197,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
         if(isset($options['visibility_timeout'])) {
             $clientOptions['VisibilityTimeout'] = $options['visibility_timeout'];
         }
-        
+
         if(isset($options['wait_time_seconds'])) {
             $clientOptions['WaitTimeSeconds'] = $options['wait_time_seconds'];
         }
