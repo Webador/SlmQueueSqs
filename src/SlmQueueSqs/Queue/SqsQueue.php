@@ -202,7 +202,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
             $clientOptions['WaitTimeSeconds'] = $options['wait_time_seconds'];
         }
 
-        $result = $this->sqsClient->receiveMessage();
+        $result = $this->sqsClient->receiveMessage($clientOptions);
 
         $messages = $result['Messages'];
 
