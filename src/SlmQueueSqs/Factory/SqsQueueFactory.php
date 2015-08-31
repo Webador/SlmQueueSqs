@@ -20,7 +20,7 @@ class SqsQueueFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator, $name = '', $requestedName = '')
     {
         $parentLocator    = $serviceLocator->getServiceLocator();
-        $sqsClient        = $parentLocator->get(Aws::class)->createSqs());
+        $sqsClient        = $parentLocator->get(Aws::class)->createSqs();
         $jobPluginManager = $parentLocator->get(JobPluginManager::class);
 
         // Let's see if we have options for this specific queue
