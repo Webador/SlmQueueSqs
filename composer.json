@@ -35,7 +35,7 @@
     "require-dev": {
         "zendframework/zendframework": "~2.2",
         "phpunit/phpunit": "~4.1",
-        "squizlabs/php_codesniffer": "1.5.*"
+        "squizlabs/php_codesniffer": "2.*"
     },
     "extra": {
         "branch-alias": {
