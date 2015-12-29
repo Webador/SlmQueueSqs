@@ -89,7 +89,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
 
         $jobs = $this->batchPop($options);
 
-        switch(count($jobs)) {
+        switch (count($jobs)) {
             case 0:
                 return null;
             case 1:
