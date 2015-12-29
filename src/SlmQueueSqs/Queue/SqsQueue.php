@@ -187,13 +187,22 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
      */
     public function batchPop(array $options = array())
     {
-        $result = $this->sqsClient->receiveMessage(array(
+        $clientOptions = array(
             'QueueUrl'            => $this->queueOptions->getQueueUrl(),
             'MaxNumberOfMessages' => isset($options['max_number_of_messages'])
-                    ? $options['max_number_of_messages'] : null,
-            'VisibilityTimeout'   => isset($options['visibility_timeout']) ? $options['visibility_timeout'] : null,
-            'WaitTimeSeconds'     => isset($options['wait_time_seconds']) ? $options['wait_time_seconds'] : null
-        ));
+                ? $options['max_number_of_messages'] : null,
+
+        );
+
+        if(isset($options['visibility_timeout'])) {
+            $clientOptions['VisibilityTimeout'] = $options['visibility_timeout'];
+        }
+
+        if(isset($options['wait_time_seconds'])) {
+            $clientOptions['WaitTimeSeconds'] = $options['wait_time_seconds'];
+        }
+
+        $result = $this->sqsClient->receiveMessage($clientOptions);
 
         $messages = $result['Messages'];
 

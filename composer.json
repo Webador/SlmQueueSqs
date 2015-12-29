@@ -24,13 +24,12 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3",
+        "php": ">=5.5",
         "zendframework/zend-mvc": "~2.2",
         "zendframework/zend-servicemanager": "~2.2",
         "zendframework/zend-stdlib": "~2.2",
         "slm/queue": "0.4.*",
-        "aws/aws-sdk-php": ">=2.1.1",
-        "aws/aws-sdk-php-zf2": "1.*"
+        "aws/aws-sdk-php-zf2": "2.*"
     },
     "require-dev": {
         "zendframework/zendframework": "~2.2",

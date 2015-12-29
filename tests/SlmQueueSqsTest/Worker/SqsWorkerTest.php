@@ -62,10 +62,11 @@ class SqsWorkerTest extends TestCase
 
         $queue = $this->getMock('SlmQueueSqs\Queue\SqsQueueInterface');
         $job   = $this->getMock('SlmQueue\Job\JobInterface');
+        $command = $this->getMock('Aws\CommandInterface');
 
         $job->expects($this->once())
             ->method('execute')
-            ->will($this->throwException(new SqsException()));
+            ->will($this->throwException(new SqsException('Foo', $command)));
 
         $queue->expects($this->never())->method('delete');
 

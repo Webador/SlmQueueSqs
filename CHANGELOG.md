@@ -1,3 +1,7 @@
+# 0.5.0
+
+- [BC] SlmQueueSqs is now based on AWS SDK v3. As a consequence, minimum PHP dependency has been bumped to 5.5.
+
 # 0.4.2
 
 - SlmQueueSqs now rethrow SQS exceptions instead of silently reinserting the job without notice.
