@@ -89,7 +89,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
 
         $jobs = $this->batchPop($options);
 
-        switch(count($jobs)) {
+        switch (count($jobs)) {
             case 0:
                 return null;
             case 1:
@@ -194,11 +194,11 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
 
         );
 
-        if(isset($options['visibility_timeout'])) {
+        if (isset($options['visibility_timeout'])) {
             $clientOptions['VisibilityTimeout'] = $options['visibility_timeout'];
         }
 
-        if(isset($options['wait_time_seconds'])) {
+        if (isset($options['wait_time_seconds'])) {
             $clientOptions['WaitTimeSeconds'] = $options['wait_time_seconds'];
         }
 
