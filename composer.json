@@ -27,6 +27,10 @@
         {
             "type": "vcs",
             "url": "https://github.com/basz/SlmQueue"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/basz/aws-sdk-php-zf2"
         }
     ],
     "minimum-stability": "dev",
@@ -37,7 +41,7 @@
         "zendframework/zend-servicemanager": "~2.7 || ^3.0",
         "zendframework/zend-stdlib": "~2.2 || ^3.0",
         "slm/queue": "dev-eventmanager-deprecations as 0.6.0",
-        "aws/aws-sdk-php-zf2": "2.*"
+        "aws/aws-sdk-php-zf2": "dev-zf-sm3-zf-ev3-compatibility as 3.0.0"
     },
     "require-dev": {
         "zendframework/zendframework": "~2.2",
