@@ -34,7 +34,8 @@ class SqsQueueTest extends TestCase
             false
         );
 
-        $this->jobPluginManager = $this->getMock('SlmQueue\Job\JobPluginManager');
+        $this->jobPluginManager = $this->getMockBuilder('SlmQueue\Job\JobPluginManager')
+            ->disableOriginalConstructor()->getMock();
 
         $this->sqsClient->expects($this->once())
                         ->method('getQueueUrl')
@@ -49,7 +50,8 @@ class SqsQueueTest extends TestCase
     public function testReuseSqsUrlFromOptions()
     {
         $sqsClient        = $this->getMock('Aws\Sqs\SqsClient', array('getQueueUrl'), array(), '', false);
-        $jobPluginManager = $this->getMock('SlmQueue\Job\JobPluginManager');
+        $jobPluginManager = $this->getMockBuilder('SlmQueue\Job\JobPluginManager')
+            ->disableOriginalConstructor()->getMock();
 
         $this->sqsClient->expects($this->never())->method('getQueueUrl');
 
