@@ -1,3 +1,7 @@
+# 0.6.0
+
+- [BC] Synchronize with SlmQueue release 0.6.0 which adds compatibility with PHP7, zend-servicemanager 3 and zend-eventmanager 3
+
 # 0.5.0
 
 - [BC] SlmQueueSqs is now based on AWS SDK v3. As a consequence, minimum PHP dependency has been bumped to 5.5.
