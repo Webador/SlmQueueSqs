@@ -4,6 +4,8 @@ namespace SlmQueueSqsTest\Worker;
 
 use Aws\Sqs\Exception\SqsException;
 use PHPUnit_Framework_TestCase as TestCase;
+use SlmQueue\Worker\Event\AbstractWorkerEvent;
+use SlmQueue\Worker\Event\ProcessJobEvent;
 use SlmQueue\Worker\WorkerEvent;
 use SlmQueueSqs\Worker\SqsWorker;
 
@@ -24,7 +26,7 @@ class SqsWorkerTest extends TestCase
         $queue = $this->getMock('SlmQueue\Queue\QueueInterface');
         $job   = $this->getMock('SlmQueue\Job\JobInterface');
 
-        $this->assertEquals(WorkerEvent::JOB_STATUS_UNKNOWN, $this->worker->processJob($job, $queue));
+        $this->assertEquals(ProcessJobEvent::JOB_STATUS_UNKNOWN, $this->worker->processJob($job, $queue));
     }
 
     public function testDeleteJobOnSuccess()
@@ -37,7 +39,7 @@ class SqsWorkerTest extends TestCase
 
         $status = $this->worker->processJob($job, $queue);
 
-        $this->assertEquals(WorkerEvent::JOB_STATUS_SUCCESS, $status);
+        $this->assertEquals(ProcessJobEvent::JOB_STATUS_SUCCESS, $status);
     }
 
     public function testDoNotDeleteJobOnFailure()
@@ -53,7 +55,7 @@ class SqsWorkerTest extends TestCase
 
         $status = $this->worker->processJob($job, $queue);
 
-        $this->assertEquals(WorkerEvent::JOB_STATUS_FAILURE_RECOVERABLE, $status);
+        $this->assertEquals(ProcessJobEvent::JOB_STATUS_FAILURE_RECOVERABLE, $status);
     }
 
     public function testRethrowSqsException()
