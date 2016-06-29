@@ -1,3 +1,8 @@
+# 0.6.1
+
+- Add documentation about how to setup properly AWS [40](https://github.com/juriansluiman/SlmQueueSqs/pull/40)
+- Fixes an issue in the queue factory [40](https://github.com/juriansluiman/SlmQueueSqs/pull/40)
+
 # 0.6.0
 
 - [BC] Synchronize with SlmQueue release 0.6.0 which adds compatibility with PHP7, zend-servicemanager 3 and zend-eventmanager 3
