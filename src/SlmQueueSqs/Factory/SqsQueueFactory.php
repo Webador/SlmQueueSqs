@@ -43,6 +43,6 @@ class SqsQueueFactory implements FactoryInterface
     {
         $parentLocator = $serviceLocator->getServiceLocator();
 
-        return $this($parentLocator, SqsQueue::class);
+        return $this($parentLocator, $requestedName);
     }
 }

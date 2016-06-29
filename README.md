@@ -45,6 +45,27 @@ for enabling the AWS ZF2 module.
 > Starting from 0.3.0, SlmQueueSqs now internally uses the official AWS Zend Framework 2 module, so you can write
 your credentials only once for all AWS services.
 
+
+Configuring AWS
+---------------
+
+Version must be specified for AWS SQS!
+
+<?php
+return [
+    'aws' => [
+        'credentials' => [
+            'key' => 'ACCESS_KEY_GOES_HERE',
+            'secret' => 'SECRET_KEY_GOES_HERE'
+        ],
+        'region' => 'us-east-1', ## or your region ##
+        'Sqs' => [
+            'version' => '2012-11-05' ## suggested to code this to a specific version of the SQS API.
+        ]
+    ]
+];
+
+
 Documentation
 -------------
 
@@ -83,7 +104,8 @@ A concrete class that implements this interface is included: `SlmQueueSqs\Queue\
 create Sqs queues. Therefore, if you want to have a queue called "newsletter", just add the following line in your
 `module.config.php` file:
 
-```php
+```
+<?php
 return array(
     'slm_queue' => array(
         'queue_manager' => array(
@@ -146,7 +168,8 @@ You may want to explicitly set queue URL instead of having it automatically fetc
 if you want to use different queues in prod and test environments, while still referencing it using the same
 queue name in your code). To do so, add the following config:
 
-```php
+```
+<?php
 return array(
     'slm_queue' => array(
         'queues' => array(
@@ -171,3 +194,39 @@ The queue name is a mandatory parameter, while the other parameters are all opti
 
 * visibilityTimeout: duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a pop request
 * waitTime: wait time (in seconds) for which the call will wait for a job to arrive in the queue before returning
+
+
+
+Troubleshooting
+---------------
+
+Issue:
+
+```
+no instance returnedMissing required client configuration options: 
+
+version: (string)
+
+  A "version" configuration value is required. Specifying a version constraint
+  ensures that your code will not be affected by a breaking change made to the
+  service. For example, when using Amazon S3, you can lock your API version to
+  "2006-03-01".
+  
+  Your build of the SDK has the following version(s) of "sqs": * "2012-11-05"
+  
+  You may provide "latest" to the "version" configuration value to utilize the
+  most recent available API version that your client's API provider can find.
+  Note: Using 'latest' in a production application is not recommended.
+  
+  A list of available API versions can be found on each client's API documentation
+  page: http://docs.aws.amazon.com/aws-sdk-php/v3/api/index.html. If you are
+  unable to load a specific API version, then you may need to update your copy of
+  the SDK.======================================================================
+   The application has thrown an exception!
+======================================================================
+ Zend\ServiceManager\Exception\ServiceNotCreatedException
+ The factory was called but did not return an instance.
+
+ ```
+
+Solution: See above Aws configuration example for version definition.
