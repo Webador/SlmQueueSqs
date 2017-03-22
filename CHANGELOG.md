@@ -1,3 +1,7 @@
+# 1.0.0
+
+- Identical to previous release
+
 # 0.6.1
 
 - Add documentation about how to setup properly AWS [40](https://github.com/juriansluiman/SlmQueueSqs/pull/40)
