@@ -14,6 +14,8 @@ use SlmQueueSqs\Options\SqsQueueOptions;
  */
 class SqsQueue extends AbstractQueue implements SqsQueueInterface
 {
+    const FIFO_QUEUE_SUFFIX = '.fifo';
+
     /**
      * @var SqsClient
      */
@@ -63,6 +65,15 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
             'MessageBody'  => $this->serializeJob($job),
             'DelaySeconds' => isset($options['delay_seconds']) ? $options['delay_seconds'] : null
         );
+
+        if ($this->isFifoQueue()) {
+            if (!isset($options['message_group_id']) || empty($options['message_group_id'])) {
+                throw new Exception\MissingMessageGroupException();
+            }
+
+            $parameters['MessageGroupId'] = $options['message_group_id'];
+            $parameters['MessageDeduplicationId'] = md5($parameters['MessageBody']);
+        }
 
         $result = $this->sqsClient->sendMessage(array_filter($parameters));
 
@@ -261,5 +272,28 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
         }
 
         $this->sqsClient->deleteMessageBatch($parameters);
+    }
+
+    /**
+     * @return bool
+     */
+    private function isFifoQueue()
+    {
+        return $this->endsWith($this->queueOptions->getQueueUrl(), self::FIFO_QUEUE_SUFFIX);
+    }
+
+    /**
+     * @param  string $haystack
+     * @param  string $needle
+     * @return bool
+     */
+    private function endsWith($haystack, $needle)
+    {
+        $length = strlen($needle);
+        if ($length === 0) {
+            return true;
+        }
+
+        return (substr($haystack, -$length) === $needle);
     }
 }
