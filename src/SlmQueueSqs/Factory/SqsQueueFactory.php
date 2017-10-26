@@ -5,6 +5,7 @@ namespace SlmQueueSqs\Factory;
 use Aws\Sdk as Aws;
 use Interop\Container\ContainerInterface;
 use SlmQueue\Job\JobPluginManager;
+use SlmQueueSqs\Exception\RuntimeException;
 use SlmQueueSqs\Options\SqsQueueOptions;
 use SlmQueueSqs\Queue\SqsQueue;
 use Zend\ServiceManager\FactoryInterface;
@@ -23,15 +24,21 @@ class SqsQueueFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
+        if (!$container->has(Aws::class)) {
+            throw new RuntimeException(sprintf(
+                'Unable to resolve %s service. Do you have enabled "AwsModule" module?',
+                Aws::class
+            ));
+        }
+
         $sqsClient        = $container->get(Aws::class)->createSqs();
         $jobPluginManager = $container->get(JobPluginManager::class);
 
         // Let's see if we have options for this specific queue
         $config = $container->get('Config');
-        $config = $config['slm_queue']['queues'];
+        $queues = $config['slm_queue']['queues'];
 
-        $options = new SqsQueueOptions(isset($config[$requestedName]) ? $config[$requestedName] : []);
-
+        $options = new SqsQueueOptions(isset($queues[$requestedName]) ? $queues[$requestedName] : []);
 
         return new SqsQueue($sqsClient, $options, $requestedName, $jobPluginManager);
     }
