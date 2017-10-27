@@ -55,6 +55,9 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     /**
      * Valid option is:
      *      - delay_seconds: the duration (in seconds) the message has to be delayed
+     *      - message_group_id: tag that specifies that a message belongs to a specific message group for FIFO queues
+     *      - enable_auto_deduplication: enable auto deduplication (boolean) of sent messages for FIFO queues
+     *      - message_deduplication_id: the token used for deduplication of sent messages of FIFO queues
      *
      * {@inheritDoc}
      */
@@ -67,12 +70,10 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
         );
 
         if ($this->isFifoQueue()) {
-            if (!isset($options['message_group_id']) || empty($options['message_group_id'])) {
-                throw new Exception\MissingMessageGroupException();
-            }
-
-            $parameters['MessageGroupId'] = $options['message_group_id'];
-            $parameters['MessageDeduplicationId'] = md5($parameters['MessageBody']);
+            $parameters = array_merge(
+                $parameters,
+                $this->getFifoQueueParameters($parameters['MessageBody'], $options)
+            );
         }
 
         $result = $this->sqsClient->sendMessage(array_filter($parameters));
@@ -130,6 +131,9 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     /**
      * Valid option is:
      *      - delay_seconds: the duration (in seconds) the message has to be delayed
+     *      - message_group_id: tag that specifies that a message belongs to a specific message group for FIFO queues
+     *      - enable_auto_deduplication: enable auto deduplication (boolean) of sent messages for FIFO queues
+     *      - message_deduplication_id: the token used for deduplication of sent messages of FIFO queues
      *
      * Please note that for this to work, the index for the job AND the option must match
      *
@@ -164,6 +168,13 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
                 'MessageBody'  => $this->serializeJob($job),
                 'DelaySeconds' => isset($options[$key]['delay_seconds']) ? $options[$key]['delay_seconds'] : null
             );
+
+            if ($this->isFifoQueue()) {
+                $jobParameters = array_merge(
+                    $jobParameters,
+                    $this->getFifoQueueParameters($jobParameters['MessageBody'], $options[$key])
+                );
+            }
 
             $parameters['Entries'][] = array_filter($jobParameters, function ($value) {
                 return $value !== null;
@@ -280,6 +291,27 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     private function isFifoQueue()
     {
         return $this->endsWith($this->queueOptions->getQueueUrl(), self::FIFO_QUEUE_SUFFIX);
+    }
+
+    /**
+     * @param array $options
+     * @return array
+     */
+    private function getFifoQueueParameters($messageBody, array $options)
+    {
+        if (!isset($options['message_group_id']) || empty($options['message_group_id'])) {
+            throw new Exception\MissingMessageGroupException();
+        }
+
+        $parameters = array('MessageGroupId' => $options['message_group_id']);
+
+        if (isset($options['enable_auto_deduplication']) && $options['enable_auto_deduplication'] === true) {
+            $parameters['MessageDeduplicationId'] = md5($messageBody);
+        } elseif (isset($options['message_deduplication_id'])) {
+            $parameters['MessageDeduplicationId'] = $parameters['message_deduplication_id'];
+        }
+
+        return $parameters;
     }
 
     /**

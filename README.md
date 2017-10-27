@@ -129,12 +129,18 @@ This queue can therefore be pulled from the QueuePluginManager class.
 Valid option is:
 
 * delay_seconds: the duration (in seconds) the message has to be delayed
+* message_group_id: tag that specifies that a message belongs to a specific message group for FIFO queues
+* enable_auto_deduplication: enable auto deduplication (boolean) of sent messages for FIFO queues (its recommanded to enable `ContentBasedDeduplication` for your queue which uses a SHA-256 hash to generate the `MessageDeduplicationId` using the body of the message)
+* message_deduplication_id: the token used for deduplication of sent messages of FIFO queues
 
 Example:
 
 ```php
 $queue->push($job, array(
-    'delay_seconds' => 20
+    'delay_seconds' => 20,
+    'message_group_id' => 'foo',
+    'enable_auto_deduplication' => false,
+    'message_deduplication_id' => 'bar',
 ));
 ```
 

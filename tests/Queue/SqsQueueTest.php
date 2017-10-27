@@ -122,7 +122,6 @@ class SqsQueueTest extends TestCase
                 'QueueUrl' => $queueUrl,
                 'MessageBody' => $this->sqsQueue->serializeJob($job),
                 'MessageGroupId' => $options['message_group_id'],
-                'MessageDeduplicationId' => md5($sqsQueue->serializeJob($job)),
             ))
             ->will($this->returnValue($result));
 
@@ -140,6 +139,37 @@ class SqsQueueTest extends TestCase
         $this->setExpectedException(MissingMessageGroupException::class);
 
         $sqsQueue->push($job);
+    }
+
+    public function testSetSpecificParametersWhenJobIsPushedToFifoQueueWithAutoDeduplicationEnabled()
+    {
+        $queueUrl = 'https://sqs.endpoint.com/test.fifo';
+        $options = new SqsQueueOptions(array('queue_url' => $queueUrl));
+        $sqsQueue = new SqsQueue($this->sqsClient, $options, 'newsletter', $this->jobPluginManager);
+
+        $job = new Asset\SimpleJob();
+        $options = array(
+            'enable_auto_deduplication' => true,
+            'message_group_id' => 123,
+        );
+
+        $result = array(
+            'MessageId' => 1,
+            'MD5OfMessageBody' => md5('baz')
+        );
+
+        $this->sqsClient
+            ->expects($this->once())
+            ->method('sendMessage')
+            ->with(array(
+                'QueueUrl' => $queueUrl,
+                'MessageBody' => $this->sqsQueue->serializeJob($job),
+                'MessageGroupId' => $options['message_group_id'],
+                'MessageDeduplicationId' => md5($sqsQueue->serializeJob($job)),
+            ))
+            ->will($this->returnValue($result));
+
+        $sqsQueue->push($job, $options);
     }
 
     public function testSetMetadataWhenMultipleJobsArePushed()
