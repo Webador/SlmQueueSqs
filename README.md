@@ -131,7 +131,7 @@ Valid option is:
 * delay_seconds: the duration (in seconds) the message has to be delayed
 * message_group_id: tag that specifies that a message belongs to a specific message group for FIFO queues
 * enable_auto_deduplication: enable auto deduplication (boolean) of sent messages for FIFO queues (its recommanded to enable `ContentBasedDeduplication` for your queue which uses a SHA-256 hash to generate the `MessageDeduplicationId` using the body of the message)
-* message_deduplication_id: the token used for deduplication of sent messages of FIFO queues
+* message_deduplication_id: the token used for deduplication of sent messages of FIFO queues. If provided, the auto deduplication is disabled.
 
 Example:
 
@@ -210,7 +210,7 @@ Troubleshooting
 Issue:
 
 ```
-no instance returnedMissing required client configuration options: 
+no instance returnedMissing required client configuration options:
 
 version: (string)
 
@@ -218,13 +218,13 @@ version: (string)
   ensures that your code will not be affected by a breaking change made to the
   service. For example, when using Amazon S3, you can lock your API version to
   "2006-03-01".
-  
+
   Your build of the SDK has the following version(s) of "sqs": * "2012-11-05"
-  
+
   You may provide "latest" to the "version" configuration value to utilize the
   most recent available API version that your client's API provider can find.
   Note: Using 'latest' in a production application is not recommended.
-  
+
   A list of available API versions can be found on each client's API documentation
   page: http://docs.aws.amazon.com/aws-sdk-php/v3/api/index.html. If you are
   unable to load a specific API version, then you may need to update your copy of

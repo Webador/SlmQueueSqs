@@ -305,10 +305,10 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
 
         $parameters = array('MessageGroupId' => $options['message_group_id']);
 
-        if (isset($options['enable_auto_deduplication']) && $options['enable_auto_deduplication'] === true) {
-            $parameters['MessageDeduplicationId'] = md5($messageBody);
-        } elseif (isset($options['message_deduplication_id'])) {
+        if (isset($options['message_deduplication_id'])) {
             $parameters['MessageDeduplicationId'] = $parameters['message_deduplication_id'];
+        } elseif (isset($options['enable_auto_deduplication']) && $options['enable_auto_deduplication'] === true) {
+            $parameters['MessageDeduplicationId'] = md5($messageBody);
         }
 
         return $parameters;
