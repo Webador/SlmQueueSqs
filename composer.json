@@ -48,8 +48,8 @@
         }
     },
     "autoload": {
-        "psr-0": {
-            "SlmQueueSqs": "src/"
+        "psr-4": {
+            "SlmQueueSqs\\": "src/"
         },
         "classmap": [
             "./Module.php"
