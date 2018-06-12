@@ -1,3 +1,7 @@
+# 1.1.0 And later
+
+Changelog for these releases can be found on the releases page, see https://github.com/juriansluiman/SlmQueueSqs/releases.
+
 # 1.0.0
 
 - Identical to previous release
