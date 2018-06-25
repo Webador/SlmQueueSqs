@@ -37,6 +37,7 @@ class SqsWorker extends AbstractWorker
             // permissions
             throw $sqsException;
         } catch (Exception $exception) {
+            $this->eventManager->trigger('logException', $this, array('exception' => $exception));
             // Do nothing, the job will be reinserted automatically for another try
             return ProcessJobEvent::JOB_STATUS_FAILURE_RECOVERABLE;
         }
