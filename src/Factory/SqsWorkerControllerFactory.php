@@ -6,8 +6,8 @@ use Interop\Container\ContainerInterface;
 use SlmQueue\Queue\QueuePluginManager;
 use SlmQueueSqs\Controller\SqsWorkerController;
 use SlmQueueSqs\Worker\SqsWorker;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * WorkerFactory

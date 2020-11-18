@@ -2,7 +2,7 @@
 
 namespace SlmQueueSqs\Options;
 
-use Zend\Stdlib\AbstractOptions;
+use Laminas\Stdlib\AbstractOptions;
 
 /**
  * Simple queue options
@@ -19,7 +19,7 @@ class SqsQueueOptions extends AbstractOptions
      *
      * @param string $queueUrl
      */
-    public function setQueueUrl($queueUrl)
+    public function setQueueUrl(string $queueUrl)
     {
         $this->queueUrl = (string) $queueUrl;
     }
