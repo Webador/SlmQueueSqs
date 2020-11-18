@@ -25,7 +25,7 @@
     ],
     "require": {
         "ext-json": "*",
-        "php": "^7.1",
+        "php": "^7.2",
         "laminas/laminas-eventmanager": "^2.6 || ^3.0",
         "laminas/laminas-servicemanager": "^2.7 || ^3.0",
         "laminas/laminas-stdlib": "^2.2 || ^3.0",
