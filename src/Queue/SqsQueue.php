@@ -29,15 +29,15 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     /**
      * Constructor
      *
-     * @param SqsClient        $sqsClient
-     * @param SqsQueueOptions  $options
-     * @param string           $name
+     * @param SqsClient $sqsClient
+     * @param SqsQueueOptions $options
+     * @param string $name
      * @param JobPluginManager $jobPluginManager
      */
     public function __construct(
         SqsClient $sqsClient,
         SqsQueueOptions $options,
-        $name,
+        string $name,
         JobPluginManager $jobPluginManager
     ) {
         $this->sqsClient    = $sqsClient;
@@ -61,7 +61,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
      *
      * {@inheritDoc}
      */
-    public function push(JobInterface $job, array $options = array())
+    public function push(JobInterface $job, array $options = array()): void
     {
         $parameters = array(
             'QueueUrl'     => $this->queueOptions->getQueueUrl(),
@@ -95,7 +95,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
      *
      * {@inheritDoc}
      */
-    public function pop(array $options = array())
+    public function pop(array $options = array()): ?JobInterface
     {
         $options['max_number_of_messages'] = 1;
 
@@ -118,7 +118,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     /**
      * {@inheritDoc}
      */
-    public function delete(JobInterface $job)
+    public function delete(JobInterface $job): void
     {
         $parameters = array(
             'QueueUrl'      => $this->queueOptions->getQueueUrl(),
@@ -294,6 +294,7 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     }
 
     /**
+     * @param $messageBody
      * @param array $options
      * @return array
      */
@@ -315,11 +316,11 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     }
 
     /**
-     * @param  string $haystack
-     * @param  string $needle
+     * @param string $haystack
+     * @param string $needle
      * @return bool
      */
-    private function endsWith($haystack, $needle)
+    private function endsWith(string $haystack, string $needle)
     {
         $length = strlen($needle);
         if ($length === 0) {

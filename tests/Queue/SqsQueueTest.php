@@ -2,7 +2,7 @@
 
 namespace SlmQueueSqsTest\Queue;
 
-use PHPUnit_Framework_TestCase as TestCase;
+use PHPUnit\Framework\TestCase;
 use SlmQueueSqs\Exception\MissingMessageGroupException;
 use SlmQueueSqs\Options\SqsQueueOptions;
 use SlmQueueSqs\Queue\SqsQueue;
@@ -11,12 +11,12 @@ use SlmQueueSqsTest\Asset;
 class SqsQueueTest extends TestCase
 {
     /**
-     * @var \Aws\Sqs\SqsClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Aws\Sqs\SqsClient|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $sqsClient;
 
     /**
-     * @var \SlmQueue\Job\JobPluginManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var \SlmQueue\Job\JobPluginManager|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $jobPluginManager;
 
@@ -25,15 +25,12 @@ class SqsQueueTest extends TestCase
      */
     protected $sqsQueue;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $this->sqsClient = $this->getMock(
-            'Aws\Sqs\SqsClient',
-            array('getQueueUrl', 'sendMessage', 'sendMessageBatch', 'deleteMessageBatch', 'receiveMessage'),
-            array(),
-            '',
-            false
-        );
+        $this->sqsClient = $this->getMockBuilder('Aws\Sqs\SqsClient')
+            ->addMethods(array('getQueueUrl', 'sendMessage', 'sendMessageBatch', 'deleteMessageBatch', 'receiveMessage'))
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->jobPluginManager = $this->getMockBuilder('SlmQueue\Job\JobPluginManager')
             ->disableOriginalConstructor()->getMock();
@@ -50,7 +47,10 @@ class SqsQueueTest extends TestCase
 
     public function testReuseSqsUrlFromOptions()
     {
-        $sqsClient        = $this->getMock('Aws\Sqs\SqsClient', array('getQueueUrl'), array(), '', false);
+        $sqsClient = $this->getMockBuilder('Aws\Sqs\SqsClient')
+            ->addMethods(array('getQueueUrl'))
+            ->disableOriginalConstructor()
+            ->getMock();
         $jobPluginManager = $this->getMockBuilder('SlmQueue\Job\JobPluginManager')
             ->disableOriginalConstructor()->getMock();
 
@@ -136,7 +136,7 @@ class SqsQueueTest extends TestCase
 
         $job = new Asset\SimpleJob();
 
-        $this->setExpectedException(MissingMessageGroupException::class);
+        $this->expectException(MissingMessageGroupException::class);
 
         $sqsQueue->push($job);
     }
