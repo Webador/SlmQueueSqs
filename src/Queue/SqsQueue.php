@@ -70,10 +70,12 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
 
         $result = $this->sqsClient->sendMessage(array_filter($parameters));
 
-        $job->setMetadata(array(
+        $job->setMetadata(
+            array(
             '__id__' => $result['MessageId'],
             'md5'    => $result['MD5OfMessageBody']
-        ));
+            )
+        );
     }
 
     /**
@@ -94,16 +96,18 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
         $jobs = $this->batchPop($options);
 
         switch (count($jobs)) {
-            case 0:
-                return null;
-            case 1:
-                return reset($jobs);
-            default:
-                throw new Exception\RuntimeException(sprintf(
+        case 0:
+            return null;
+        case 1:
+            return reset($jobs);
+        default:
+            throw new Exception\RuntimeException(
+                sprintf(
                     '%s jobs were popped in "%s" method, while only one (or zero) were expected.',
                     count($jobs),
                     __METHOD__
-                ));
+                )
+            );
         }
     }
 
@@ -153,7 +157,9 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
             'Entries'  => array()
         );
 
-        /** @var $job JobInterface */
+        /**
+         * @var $job JobInterface 
+         */
         foreach ($jobs as $key => $job) {
             $jobParameters = array(
                 'Id'           => $key, // Identifier of the message in the batch
@@ -168,9 +174,11 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
                 );
             }
 
-            $parameters['Entries'][] = array_filter($jobParameters, function ($value) {
-                return $value !== null;
-            });
+            $parameters['Entries'][] = array_filter(
+                $jobParameters, function ($value) {
+                    return $value !== null;
+                }
+            );
         }
 
         $result   = $this->sqsClient->sendMessageBatch($parameters);
@@ -178,10 +186,12 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
 
         foreach ($messages as $message) {
             $batchId = $message['Id'];
-            $jobs[$batchId]->setMetadata(array(
+            $jobs[$batchId]->setMetadata(
+                array(
                 '__id__' => $message['MessageId'],
                 'md5'    => $message['MD5OfMessageBody']
-            ));
+                )
+            );
         }
     }
 
@@ -264,7 +274,9 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
             'Entries'  => array()
         );
 
-        /** @var $job JobInterface */
+        /**
+         * @var $job JobInterface 
+         */
         foreach ($jobs as $key => $job) {
             $jobParameters = array(
                 'Id'            => $key, // Identifier of the message in the batch
@@ -286,8 +298,8 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     }
 
     /**
-     * @param $messageBody
-     * @param array $options
+     * @param  $messageBody
+     * @param  array $options
      * @return array
      */
     private function getFifoQueueParameters($messageBody, array $options)
@@ -308,8 +320,8 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
     }
 
     /**
-     * @param string $haystack
-     * @param string $needle
+     * @param  string $haystack
+     * @param  string $needle
      * @return bool
      */
     private function endsWith(string $haystack, string $needle)

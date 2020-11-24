@@ -36,9 +36,9 @@ class SqsQueueTest extends TestCase
             ->disableOriginalConstructor()->getMock();
 
         $this->sqsClient->expects($this->any())
-                        ->method('getQueueUrl')
-                        ->with(array('QueueName' => 'newsletter'))
-                        ->will($this->returnValue(array('QueueUrl' => 'https://sqs.endpoint.com')));
+            ->method('getQueueUrl')
+            ->with(array('QueueName' => 'newsletter'))
+            ->will($this->returnValue(array('QueueUrl' => 'https://sqs.endpoint.com')));
 
         $options = new SqsQueueOptions();
 
@@ -71,16 +71,20 @@ class SqsQueueTest extends TestCase
         );
 
         $this->sqsClient->expects($this->once())
-                        ->method('sendMessage')
-                        ->with(array(
+            ->method('sendMessage')
+            ->with(
+                array(
                             'QueueUrl'    => 'https://sqs.endpoint.com',
                             'MessageBody' => $this->sqsQueue->serializeJob($job)
-                        ))
-                        ->will($this->returnValue($result));
+                        )
+            )
+            ->will($this->returnValue($result));
 
-        $this->sqsQueue->push($job, array(
+        $this->sqsQueue->push(
+            $job, array(
             'delay_seconds' => null
-        ));
+            )
+        );
     }
 
     public function testSetMetadataWhenJobIsPushed()
@@ -94,10 +98,12 @@ class SqsQueueTest extends TestCase
 
         $this->sqsClient->expects($this->once())
             ->method('sendMessage')
-            ->with(array(
+            ->with(
+                array(
                 'QueueUrl'    => 'https://sqs.endpoint.com',
                 'MessageBody' => $this->sqsQueue->serializeJob($job)
-            ))
+                )
+            )
             ->will($this->returnValue($result));
 
         $this->sqsQueue->push($job);
@@ -124,11 +130,13 @@ class SqsQueueTest extends TestCase
         $this->sqsClient
             ->expects($this->once())
             ->method('sendMessage')
-            ->with(array(
+            ->with(
+                array(
                 'QueueUrl' => $queueUrl,
                 'MessageBody' => $this->sqsQueue->serializeJob($job),
                 'MessageGroupId' => $options['message_group_id'],
-            ))
+                )
+            )
             ->will($this->returnValue($result));
 
         $sqsQueue->push($job, $options);
@@ -167,12 +175,14 @@ class SqsQueueTest extends TestCase
         $this->sqsClient
             ->expects($this->once())
             ->method('sendMessage')
-            ->with(array(
+            ->with(
+                array(
                 'QueueUrl' => $queueUrl,
                 'MessageBody' => $this->sqsQueue->serializeJob($job),
                 'MessageGroupId' => $options['message_group_id'],
                 'MessageDeduplicationId' => md5($sqsQueue->serializeJob($job)),
-            ))
+                )
+            )
             ->will($this->returnValue($result));
 
         $sqsQueue->push($job, $options);
@@ -190,7 +200,7 @@ class SqsQueueTest extends TestCase
                 0 => array(
                     'Id'        => 0,
                     'MessageId' => 1,
-                    'MD5OfMessageBody' => md5 ('bar')
+                    'MD5OfMessageBody' => md5('bar')
                 ),
 
                 1 => array(
@@ -203,9 +213,10 @@ class SqsQueueTest extends TestCase
 
         $this->sqsClient->expects($this->once())
             ->method('sendMessageBatch')
-            ->with(array(
-            'QueueUrl' => 'https://sqs.endpoint.com',
-            'Entries'  => array(
+            ->with(
+                array(
+                'QueueUrl' => 'https://sqs.endpoint.com',
+                'Entries'  => array(
                 array(
                     'Id'          => 0,
                     'MessageBody' => $this->sqsQueue->serializeJob($jobs[0])
@@ -214,8 +225,9 @@ class SqsQueueTest extends TestCase
                     'Id'          => 1,
                     'MessageBody' => $this->sqsQueue->serializeJob($jobs[1])
                 )
+                )
+                )
             )
-        ))
             ->will($this->returnValue($result));
 
         $this->sqsQueue->batchPush($jobs);
@@ -266,7 +278,7 @@ class SqsQueueTest extends TestCase
                 0 => array(
                     'Id'        => 0,
                     'MessageId' => 1,
-                    'MD5OfMessageBody' => md5 ('fpp')
+                    'MD5OfMessageBody' => md5('fpp')
                 )
             )
         );
@@ -274,19 +286,27 @@ class SqsQueueTest extends TestCase
         $self = $this;
 
         $this->sqsClient->expects($this->at(0))
-                        ->method('sendMessageBatch')
-                        ->with($this->callback(function($parameters) use ($self) {
-                $self->assertCount(10, $parameters['Entries']);
-                return true;
-            }))
+            ->method('sendMessageBatch')
+            ->with(
+                $this->callback(
+                    function ($parameters) use ($self) {
+                        $self->assertCount(10, $parameters['Entries']);
+                        return true;
+                    }
+                )
+            )
                         ->will($this->returnValue($firstResult));
 
         $this->sqsClient->expects($this->at(1))
-                        ->method('sendMessageBatch')
-                        ->with($this->callback(function($parameters) use ($self) {
-                $self->assertCount(1, $parameters['Entries']);
-                return true;
-            }))
+            ->method('sendMessageBatch')
+            ->with(
+                $this->callback(
+                    function ($parameters) use ($self) {
+                        $self->assertCount(1, $parameters['Entries']);
+                        return true;
+                    }
+                )
+            )
                         ->will($this->returnValue($secondResult));
 
         $this->sqsQueue->batchPush($jobs);
@@ -297,7 +317,7 @@ class SqsQueueTest extends TestCase
     public function testNeverBatchPushIfNoJobInArray()
     {
         $this->sqsClient->expects($this->never())
-                       ->method('sendMessageBatch');
+            ->method('sendMessageBatch');
 
         $this->sqsQueue->batchPush(array());
     }
@@ -337,7 +357,7 @@ class SqsQueueTest extends TestCase
                 0 => array(
                     'Id'        => 0,
                     'MessageId' => 1,
-                    'MD5OfMessageBody' => md5 ('fpp')
+                    'MD5OfMessageBody' => md5('fpp')
                 )
             )
         );
@@ -346,18 +366,26 @@ class SqsQueueTest extends TestCase
 
         $this->sqsClient->expects($this->at(0))
             ->method('deleteMessageBatch')
-            ->with($this->callback(function($parameters) use ($self) {
-                        $self->assertCount(10, $parameters['Entries']);
-                        return true;
-                    }))
+            ->with(
+                $this->callback(
+                    function ($parameters) use ($self) {
+                            $self->assertCount(10, $parameters['Entries']);
+                            return true;
+                    }
+                )
+            )
             ->will($this->returnValue($firstResult));
 
         $this->sqsClient->expects($this->at(1))
             ->method('deleteMessageBatch')
-            ->with($this->callback(function($parameters) use ($self) {
-                        $self->assertCount(1, $parameters['Entries']);
-                        return true;
-                    }))
+            ->with(
+                $this->callback(
+                    function ($parameters) use ($self) {
+                            $self->assertCount(1, $parameters['Entries']);
+                            return true;
+                    }
+                )
+            )
             ->will($this->returnValue($secondResult));
 
         $this->sqsQueue->batchDelete($jobs);
@@ -368,7 +396,7 @@ class SqsQueueTest extends TestCase
     public function testNeverBatchDeleteIfNoJobInArray()
     {
         $this->sqsClient->expects($this->never())
-                        ->method('deleteMessageBatch');
+            ->method('deleteMessageBatch');
 
         $this->sqsQueue->batchDelete(array());
     }
@@ -377,35 +405,43 @@ class SqsQueueTest extends TestCase
     {
         $this->sqsClient->expects($this->once())
             ->method('receiveMessage')
-            ->will($this->returnValue(array(
-                'Messages' => array(
+            ->will(
+                $this->returnValue(
                     array(
-                        'Body' => json_encode(array(
+                    'Messages' => array(
+                    array(
+                        'Body' => json_encode(
+                            array(
                             'content'  => serialize('aa'),
                             'metadata' => array('__name__' => 'MyClass', 'foo' => 'bar')
-                        )),
+                            )
+                        ),
                         'MessageId'     => 'id_123',
                         'ReceiptHandle' => 'receipt_123',
                         'MD5OfBody'     => 'funny'
                     )
+                    )
+                    )
                 )
-            )));
+            );
 
         $this->jobPluginManager->expects($this->once())
-                               ->method('get')
-                               ->with('MyClass')
-                               ->will($this->returnValue(new Asset\SimpleJob()));
+            ->method('get')
+            ->with('MyClass')
+            ->will($this->returnValue(new Asset\SimpleJob()));
 
         $job = $this->sqsQueue->pop();
 
         $this->assertInstanceOf('SlmQueueSqsTest\Asset\SimpleJob', $job);
         $this->assertEquals('aa', $job->getContent());
-        $this->assertEquals(array(
+        $this->assertEquals(
+            array(
             '__id__'        => 'id_123',
             '__name__'      => 'MyClass',
             'receiptHandle' => 'receipt_123',
             'md5'           => 'funny',
             'foo'           => 'bar'
-        ), $job->getMetadata());
+            ), $job->getMetadata()
+        );
     }
 }

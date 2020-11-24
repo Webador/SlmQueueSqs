@@ -15,9 +15,9 @@ class SqsWorkerControllerTest extends TestCase
         $pluginManager = $this->getMockBuilder('SlmQueue\Queue\QueuePluginManager')->disableOriginalConstructor()->getMock();
 
         $pluginManager->expects($this->once())
-                      ->method('get')
-                      ->with('newsletter')
-                      ->will($this->returnValue($queue));
+            ->method('get')
+            ->with('newsletter')
+            ->will($this->returnValue($queue));
 
         $controller    = new SqsWorkerController($worker, $pluginManager);
 
@@ -25,9 +25,9 @@ class SqsWorkerControllerTest extends TestCase
         $controller->getEvent()->setRouteMatch($routeMatch);
 
         $worker->expects($this->once())
-               ->method('processQueue')
-               ->with($queue)
-               ->will($this->returnValue(array('One state')));
+            ->method('processQueue')
+            ->with($queue)
+            ->will($this->returnValue(array('One state')));
 
         $result = $controller->processAction();
 

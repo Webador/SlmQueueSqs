@@ -15,9 +15,9 @@ use Laminas\ServiceManager\ServiceLocatorInterface;
 class SqsWorkerControllerFactory implements FactoryInterface
 {
     /**
-     * @param ContainerInterface $container
-     * @param                    $requestedName
-     * @param array|null         $options
+     * @param  ContainerInterface $container
+     * @param  $requestedName
+     * @param  array|null         $options
      * @return SqsWorkerController
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
