@@ -41,7 +41,8 @@
         "laminas/laminas-serializer": "^2.9",
         "laminas/laminas-mvc": "^3.1",
         "phpunit/phpunit": "^8.5",
-        "squizlabs/php_codesniffer": "^3.5"
+        "squizlabs/php_codesniffer": "^3.5",
+        "php-coveralls/php-coveralls": "^2.4"
     },
     "extra": {
         "branch-alias": {
@@ -63,5 +64,9 @@
         "psr-4": {
             "SlmQueueSqsTest\\": "tests/"
         }
+    },
+    "scripts": {
+        "cs-check": "phpcs",
+        "cs-fix": "phpcbf"
     }
 }
