@@ -65,12 +65,18 @@ class SqsQueueTest extends TestCase
     {
         $job = new Asset\SimpleJob();
 
+        $result = array(
+            'MessageId' => 1,
+            'MD5OfMessageBody' => md5('baz')
+        );
+
         $this->sqsClient->expects($this->once())
                         ->method('sendMessage')
                         ->with(array(
                             'QueueUrl'    => 'https://sqs.endpoint.com',
                             'MessageBody' => $this->sqsQueue->serializeJob($job)
-                        ));
+                        ))
+                        ->will($this->returnValue($result));
 
         $this->sqsQueue->push($job, array(
             'delay_seconds' => null
