@@ -26,14 +26,6 @@ class SqsQueue extends AbstractQueue implements SqsQueueInterface
      */
     protected $queueOptions;
 
-    /**
-     * Constructor
-     *
-     * @param SqsClient $sqsClient
-     * @param SqsQueueOptions $options
-     * @param string $name
-     * @param JobPluginManager $jobPluginManager
-     */
     public function __construct(
         SqsClient $sqsClient,
         SqsQueueOptions $options,

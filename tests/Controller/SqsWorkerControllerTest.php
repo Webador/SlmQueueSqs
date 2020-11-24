@@ -4,7 +4,7 @@ namespace SlmQueueSqsTest\Controller;
 
 use PHPUnit\Framework\TestCase;
 use SlmQueueSqs\Controller\SqsWorkerController;
-use Laminas\Mvc\Router\RouteMatch;
+use Laminas\Router\RouteMatch;
 
 class SqsWorkerControllerTest extends TestCase
 {
