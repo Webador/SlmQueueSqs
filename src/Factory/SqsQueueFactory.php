@@ -7,8 +7,8 @@ use Interop\Container\ContainerInterface;
 use SlmQueue\Job\JobPluginManager;
 use SlmQueueSqs\Options\SqsQueueOptions;
 use SlmQueueSqs\Queue\SqsQueue;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Laminas\ServiceManager\FactoryInterface;
+use Laminas\ServiceManager\ServiceLocatorInterface;
 
 /**
  * SqsQueueFactory
@@ -16,9 +16,9 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class SqsQueueFactory implements FactoryInterface
 {
     /**
-     * @param ContainerInterface $container
-     * @param string             $requestedName
-     * @param array|null         $options
+     * @param  ContainerInterface $container
+     * @param  string             $requestedName
+     * @param  array|null         $options
      * @return SqsQueue
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)

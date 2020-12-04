@@ -17,7 +17,7 @@ class SqsWorkerController extends AbstractWorkerController
      * @return string
      * @throws WorkerProcessException
      */
-    public function processAction()
+    public function processAction(): string
     {
         $params = $this->params()->fromRoute();
 

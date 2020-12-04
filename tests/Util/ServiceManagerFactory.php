@@ -19,8 +19,8 @@
 
 namespace SlmQueueSqsTest\Util;
 
-use Zend\Mvc\Service\ServiceManagerConfig;
-use Zend\ServiceManager\ServiceManager;
+use Laminas\Mvc\Service\ServiceManagerConfig;
+use Laminas\ServiceManager\ServiceManager;
 
 /**
  * Utility used to retrieve a freshly bootstrapped application's service manager
@@ -49,13 +49,17 @@ class ServiceManagerFactory
      */
     public static function getServiceManager()
     {
-        $serviceManager = new ServiceManager(new ServiceManagerConfig(
-            isset(static::$config['service_manager']) ? static::$config['service_manager'] : array()
-        ));
+        $serviceManager = new ServiceManager(
+            new ServiceManagerConfig(
+                isset(static::$config['service_manager']) ? static::$config['service_manager'] : array()
+            )
+        );
         $serviceManager->setService('ApplicationConfig', static::$config);
         $serviceManager->setFactory('ServiceListener', 'Zend\Mvc\Service\ServiceListenerFactory');
 
-        /** @var $moduleManager \Zend\ModuleManager\ModuleManager */
+        /**
+         * @var $moduleManager \Laminas\ModuleManager\ModuleManager 
+         */
         $moduleManager = $serviceManager->get('ModuleManager');
         $moduleManager->loadModules();
         //$serviceManager->setAllowOverride(true);

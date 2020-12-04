@@ -18,9 +18,10 @@
 
 namespace SlmQueueSqsTest\Options;
 
+use PHPUnit\Framework\TestCase;
 use SlmQueueSqs\Options\SqsQueueOptions;
 
-class SqsQueueOptionsTest extends \PHPUnit_Framework_TestCase
+class SqsQueueOptionsTest extends TestCase
 {
     public function testSettersAndGetters()
     {

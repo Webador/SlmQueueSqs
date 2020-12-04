@@ -2,9 +2,9 @@
 
 namespace SlmQueueSqs;
 
-use Zend\Console\Adapter\AdapterInterface;
-use Zend\Loader;
-use Zend\ModuleManager\Feature;
+use Laminas\Console\Adapter\AdapterInterface;
+use Laminas\Loader;
+use Laminas\ModuleManager\Feature;
 
 /**
  * SlmQueueSqs
