@@ -11,7 +11,7 @@ Version 0.5.0 Created by Jurian Sluiman and Michaël Gallego
 Project Status: Looking for contributors and maintainers
 --------------------------------------------------------
 
-**This project is not under active development.** If you use `SlmQueueSqs` and would like to develop it further, please let us know in the [maintainers wanted issue][https://github.com/Webador/SlmQueueSqs/issues/58].
+**This project is not under active development.** If you use `SlmQueueSqs` and would like to develop it further, please let us know in the [maintainers wanted issue](https://github.com/Webador/SlmQueueSqs/issues/58).
 
 Requirements
 ------------
